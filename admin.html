@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bảng điều khiển thiệp cưới</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script src="data.js"></script>
 <style>
   :root{--xanh:#14213d;--vang:#c9a961;--vien:#e2dccd;--nhat:#6b7280}
@@ -70,7 +71,29 @@
         <img class="xem-anh" id="xem-cd">
       </div>
     </div>
-    <div class="hang-nut"><button class="nut phu2" id="xoa-anh">Xoá ảnh, quay về ảnh mặc định</button></div>
+    <div class="hang-nut">
+      <button class="nut" id="tai-bia">⬇ Tải ảnh bìa (anh-bia.jpg)</button>
+      <button class="nut phu2" id="xoa-anh">Xoá ảnh, quay về ảnh mặc định</button>
+    </div>
+    <div class="canh-bao">
+      <b>Ảnh bìa là gì?</b> Là ảnh hiện ra khi bạn dán link vào Zalo / Messenger. Ảnh này phải là một file riêng trong repo tên đúng là <code>anh-bia.jpg</code> — Zalo không đọc được ảnh nhúng trong data.js.<br>
+      Sau khi chọn ảnh nền ở trên, bấm <b>⬇ Tải ảnh bìa</b> rồi upload file <code>anh-bia.jpg</code> lên GitHub cùng với <code>data.js</code>.
+    </div>
+  </div>
+
+  <!-- ẢNH KÈM QR ĐỂ GỬI -->
+  <div class="khoi">
+    <h2>📸 Tạo ảnh thiệp kèm mã QR để gửi</h2>
+    <p class="mota">Tạo ra một tấm ảnh có ảnh cưới, tên, ngày cưới và mã QR. Gửi ảnh này vào Zalo kèm lời nhắn, khách quét QR là vào thẳng thiệp.</p>
+    <div class="o">
+      <label>Tên khách (để trống = mẫu chung gửi cho mọi người)</label>
+      <input id="qr-ten-khach" placeholder="Ví dụ: Anh Hưng">
+    </div>
+    <div class="hang-nut">
+      <button class="nut" id="tao-anh-qr">Tạo ảnh</button>
+      <button class="nut phu2" id="tai-anh-qr">⬇ Tải ảnh về</button>
+    </div>
+    <canvas id="canvas-qr" style="width:100%;max-width:320px;border-radius:12px;border:1px solid var(--vien);margin-top:14px;display:none"></canvas>
   </div>
 
   <!-- CHUNG -->
@@ -307,6 +330,118 @@ G("xem-thu").onclick = () => {
   thuThap();
   try { sessionStorage.setItem("xem_thu", JSON.stringify(DL)); } catch(e){}
   window.open("index.html?xemthu=1", "_blank");
+};
+
+/* ---------- Tải ảnh bìa anh-bia.jpg ---------- */
+function taiDataUrl(dataUrl, ten){
+  const a = document.createElement("a"); a.href = dataUrl; a.download = ten; a.click();
+}
+G("tai-bia").onclick = () => {
+  if (!DL.anhNen || !DL.anhNen.startsWith("data:")){
+    alert("Bạn hãy chọn Ảnh nền ở ô trên trước đã.\nSau khi chọn ảnh, bấm lại nút này.");
+    return;
+  }
+  taiDataUrl(DL.anhNen, "anh-bia.jpg");
+  alert("Đã tải anh-bia.jpg.\nUpload file này lên GitHub cùng với data.js nhé.");
+};
+
+/* ---------- Tạo ảnh thiệp kèm mã QR ---------- */
+function napAnh(src){
+  return new Promise((ok, loi) => {
+    const i = new Image();
+    i.onload = () => ok(i); i.onerror = loi; i.src = src;
+  });
+}
+function khungTron(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(x,y,w,h,r);
+  else {
+    ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+  }
+}
+async function veAnhQR(){
+  thuThap();
+  const c = G("canvas-qr"), ctx = c.getContext("2d");
+  c.width = 1080; c.height = 1350; c.style.display = "block";
+
+  const tenKhach = G("qr-ten-khach").value.trim();
+  const goc = (G("url-goc").value || location.href.replace(/admin\.html.*$/,""))
+                .replace(/\?.*$/,"").replace(/\/?$/,"/");
+  const link = tenKhach ? goc + "?khach=" + encodeURIComponent(tenKhach) : goc;
+
+  ctx.fillStyle = "#14213d"; ctx.fillRect(0,0,1080,1350);
+  try{
+    const nguon = (DL.anhNen && DL.anhNen.startsWith("data:")) ? DL.anhNen : "anh-cuoi.png";
+    const img = await napAnh(nguon);
+    const ty = Math.max(1080/img.width, 1350/img.height);
+    const w = img.width*ty, h = img.height*ty;
+    ctx.drawImage(img, (1080-w)/2, (1350-h)/2*0.55, w, h);
+  }catch(e){}
+
+  const g = ctx.createLinearGradient(0,0,0,1350);
+  g.addColorStop(0,"rgba(10,15,30,.62)");
+  g.addColorStop(.40,"rgba(10,15,30,.38)");
+  g.addColorStop(1,"rgba(10,15,30,.96)");
+  ctx.fillStyle = g; ctx.fillRect(0,0,1080,1350);
+  ctx.strokeStyle = "rgba(201,169,97,.75)"; ctx.lineWidth = 3;
+  ctx.strokeRect(36,36,1008,1278);
+
+  try { await document.fonts.ready; } catch(e){}
+  ctx.textAlign = "center";
+
+  ctx.fillStyle = "#e8d9a8"; ctx.font = "500 28px 'Be Vietnam Pro',sans-serif";
+  ctx.fillText("S A V E   T H E   D A T E", 540, 140);
+
+  const cdT = DL.coDau.tenGoi || "", crT = DL.chuRe.tenGoi || "";
+  ctx.fillStyle = "#fff";  ctx.font = "700 104px 'Dancing Script',cursive"; ctx.fillText(cdT, 540, 282);
+  ctx.fillStyle = "#c9a961"; ctx.font = "700 58px 'Dancing Script',cursive"; ctx.fillText("&", 540, 350);
+  ctx.fillStyle = "#fff";  ctx.font = "700 104px 'Dancing Script',cursive"; ctx.fillText(crT, 540, 452);
+
+  const M = new Date(String(DL.ngayGioChinh||"").replace(" ","T")+":00");
+  if (!isNaN(M)){
+    const THU = ["Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
+    ctx.strokeStyle = "rgba(255,255,255,.45)"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(330,500); ctx.lineTo(750,500); ctx.stroke();
+    ctx.fillStyle = "#fff"; ctx.font = "300 46px 'Be Vietnam Pro',sans-serif";
+    ctx.fillText(THU[M.getDay()] + ", " + String(M.getDate()).padStart(2,"0") + "." +
+                 String(M.getMonth()+1).padStart(2,"0") + "." + M.getFullYear(), 540, 560);
+    ctx.font = "400 32px 'Be Vietnam Pro',sans-serif"; ctx.fillStyle = "rgba(255,255,255,.82)";
+    ctx.fillText(String(M.getHours()).padStart(2,"0")+":"+String(M.getMinutes()).padStart(2,"0") +
+                 " — " + (DL.diaDiemChinh||""), 540, 610);
+    ctx.beginPath(); ctx.moveTo(330,645); ctx.lineTo(750,645); ctx.stroke();
+  }
+
+  let yQR = 760;
+  if (tenKhach){
+    ctx.fillStyle = "rgba(201,169,97,.95)"; ctx.font = "400 30px 'Be Vietnam Pro',sans-serif";
+    ctx.fillText("Trân trọng kính mời", 540, 710);
+    ctx.fillStyle = "#fff"; ctx.font = "700 62px 'Dancing Script',cursive";
+    ctx.fillText(tenKhach, 540, 775);
+    yQR = 825;
+  }
+
+  const qrData = await QRCode.toDataURL(link, { margin:1, width:360, color:{dark:"#14213d", light:"#ffffff"} });
+  const qrImg = await napAnh(qrData);
+  ctx.fillStyle = "#fff";
+  khungTron(ctx, 540-190, yQR, 380, 380, 26); ctx.fill();
+  ctx.drawImage(qrImg, 540-170, yQR+20, 340, 340);
+
+  ctx.fillStyle = "#e8d9a8"; ctx.font = "500 30px 'Be Vietnam Pro',sans-serif";
+  ctx.fillText("Quét mã để mở thiệp mời", 540, yQR + 440);
+  ctx.fillStyle = "rgba(255,255,255,.6)"; ctx.font = "300 24px 'Be Vietnam Pro',sans-serif";
+  ctx.fillText(goc.replace(/^https?:\/\//,""), 540, yQR + 482);
+}
+G("tao-anh-qr").onclick = async () => {
+  try { await veAnhQR(); } catch(e){ alert("Không tạo được ảnh: " + e); }
+};
+G("tai-anh-qr").onclick = () => {
+  const c = G("canvas-qr");
+  if (c.style.display === "none"){ alert("Bạn bấm Tạo ảnh trước đã."); return; }
+  const ten = G("qr-ten-khach").value.trim();
+  taiDataUrl(c.toDataURL("image/jpeg", 0.92), ten ? ("thiep-" + ten.replace(/\s+/g,"-") + ".jpg") : "thiep-moi-chung.jpg");
 };
 
 /* ---------- Tạo link mời riêng cho từng khách ---------- */

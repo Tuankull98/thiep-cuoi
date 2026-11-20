@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bảng điều khiển thiệp cưới</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="qrcode.js"></script>
 <script src="data.js"></script>
 <style>
   :root{--xanh:#14213d;--vang:#c9a961;--vien:#e2dccd;--nhat:#6b7280}
@@ -352,6 +352,21 @@ function napAnh(src){
     i.onload = () => ok(i); i.onerror = loi; i.src = src;
   });
 }
+/* Vẽ mã QR trực tiếp lên canvas, không cần mạng ngoài */
+function veMaQR(ctx, noiDung, x, y, kichThuoc, mau){
+  if (typeof qrcode !== "function") throw new Error("Chưa tải được file qrcode.js");
+  const qr = qrcode(0, "M");
+  qr.addData(noiDung);
+  qr.make();
+  const n = qr.getModuleCount();
+  const o = kichThuoc / n;
+  ctx.fillStyle = mau;
+  for (let r = 0; r < n; r++){
+    for (let c = 0; c < n; c++){
+      if (qr.isDark(r, c)) ctx.fillRect(x + c*o, y + r*o, Math.ceil(o), Math.ceil(o));
+    }
+  }
+}
 function khungTron(ctx,x,y,w,h,r){
   ctx.beginPath();
   if (ctx.roundRect) ctx.roundRect(x,y,w,h,r);
@@ -423,11 +438,9 @@ async function veAnhQR(){
     yQR = 825;
   }
 
-  const qrData = await QRCode.toDataURL(link, { margin:1, width:360, color:{dark:"#14213d", light:"#ffffff"} });
-  const qrImg = await napAnh(qrData);
   ctx.fillStyle = "#fff";
   khungTron(ctx, 540-190, yQR, 380, 380, 26); ctx.fill();
-  ctx.drawImage(qrImg, 540-170, yQR+20, 340, 340);
+  veMaQR(ctx, link, 540-170, yQR+20, 340, "#14213d");
 
   ctx.fillStyle = "#e8d9a8"; ctx.font = "500 30px 'Be Vietnam Pro',sans-serif";
   ctx.fillText("Quét mã để mở thiệp mời", 540, yQR + 440);

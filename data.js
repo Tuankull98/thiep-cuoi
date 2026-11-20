@@ -1,8 +1,4 @@
-/* ============================================================
-   FILE THÔNG TIN THIỆP CƯỚI
-   Bạn KHÔNG cần sửa tay file này.
-   Hãy mở trang admin.html, điền vào bảng, rồi bấm nút tạo file mới.
-   ============================================================ */
+/* File thông tin thiệp cưới — tạo tự động từ admin.html */
 window.THONG_TIN = {
   "anhNen": "anh-cuoi.png",
   "anhChuRe": "",

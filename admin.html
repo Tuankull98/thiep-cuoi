@@ -137,15 +137,20 @@
       <div class="o"><label>Chat ID</label><input id="telegramChatId" placeholder="123456789"></div>
     </div>
     <div class="o"><label>Số điện thoại nhận SMS (dự phòng khi Telegram lỗi)</label><input id="soNhanTin"></div>
-    <div class="hang-nut"><button class="nut phu2" id="test-tele">Gửi thử một tin nhắn</button></div>
+    <div class="hang-nut">
+      <button class="nut phu2" id="mo-bot">① Mở bot của tôi</button>
+      <button class="nut" id="lay-id">② Lấy Chat ID tự động</button>
+      <button class="nut phu2" id="test-tele">③ Gửi thử một tin nhắn</button>
+    </div>
     <p class="bao" id="bao-tele"></p>
 
     <div class="canh-bao">
-      <b>Cách lấy Token và Chat ID:</b>
+      <b>Làm theo đúng 4 bước này:</b>
       <ol>
-        <li>Mở Telegram, tìm <code>@BotFather</code>, gõ <code>/newbot</code>, đặt tên bot. BotFather trả về một chuỗi dài — đó là <b>Bot Token</b>.</li>
-        <li>Tìm tiếp <code>@userinfobot</code>, bấm Start. Nó trả về số <b>Id</b> của bạn — đó là <b>Chat ID</b>.</li>
-        <li>Quan trọng: quay lại tìm bot vừa tạo, bấm <b>Start</b> một lần. Không làm bước này Telegram sẽ chặn, bot không nhắn cho bạn được.</li>
+        <li>Mở Telegram, tìm <code>@BotFather</code>, gõ <code>/newbot</code>, đặt tên bot. BotFather trả về một chuỗi dài — copy dán vào ô <b>Bot Token</b> ở trên.</li>
+        <li>Bấm nút <b>① Mở bot của tôi</b> — Telegram sẽ mở ra đúng con bot đó. Bấm <b>Start</b>, rồi gõ đại một chữ bất kỳ và gửi. Bot không trả lời gì là bình thường, nó chỉ là cái hộp nhận tin.</li>
+        <li>Quay lại đây, bấm <b>② Lấy Chat ID tự động</b>. Ô Chat ID sẽ tự điền.</li>
+        <li>Bấm <b>③ Gửi thử một tin nhắn</b> để kiểm tra. Nhận được tin trên Telegram là xong.</li>
       </ol>
       <p style="margin-top:10px"><b>Lưu ý bảo mật:</b> repo GitHub của bạn để Public nên ai xem mã nguồn cũng thấy được token này. Hãy tạo bot <b>riêng chỉ dùng cho thiệp cưới</b>, đừng dùng bot đang dùng việc khác. Rủi ro tối đa là có người nghịch gửi tin spam vào bot đó — khi cưới xong bạn vào BotFather gõ <code>/deletebot</code> là xong.</p>
     </div>
@@ -284,9 +289,75 @@ G("xem-thu").onclick = () => {
   window.open("index.html?xemthu=1", "_blank");
 };
 
+/* ---------- Telegram: mở bot, lấy Chat ID tự động ---------- */
+function baoTele(mau, chu){
+  const b = G("bao-tele"); b.style.display = "block"; b.style.color = mau; b.innerHTML = chu;
+}
+function layToken(){
+  const t = G("telegramToken").value.trim().replace(/^bot/i, "");
+  if (!t) { baoTele("#b91c1c", "Bạn chưa dán Bot Token vào ô bên trên."); return null; }
+  return t;
+}
+async function goiTele(token, lenh){
+  const r = await fetch("https://api.telegram.org/bot" + token + "/" + lenh);
+  return await r.json();
+}
+
+G("mo-bot").onclick = async () => {
+  const token = layToken(); if (!token) return;
+  baoTele("#6b7280", "Đang tìm bot...");
+  try{
+    const j = await goiTele(token, "getMe");
+    if (!j.ok){
+      baoTele("#b91c1c", "Token sai. Vào @BotFather gõ <code>/mybots</code> → chọn bot → <b>API Token</b> để lấy lại.");
+      return;
+    }
+    const ten = j.result.username;
+    baoTele("#15803d", "Tìm thấy bot <b>@" + ten + "</b>. Đang mở Telegram... Hãy bấm <b>Start</b> rồi gửi một tin nhắn bất kỳ, sau đó quay lại bấm nút ②.");
+    window.open("https://t.me/" + ten, "_blank");
+  } catch(e){ baoTele("#b91c1c", "Không kết nối được Telegram. Kiểm tra mạng."); }
+};
+
+G("lay-id").onclick = async () => {
+  const token = layToken(); if (!token) return;
+  baoTele("#6b7280", "Đang tìm Chat ID...");
+  try{
+    const j = await goiTele(token, "getUpdates");
+    if (!j.ok){
+      baoTele("#b91c1c", "Token sai. Kiểm tra lại chuỗi token đã dán.");
+      return;
+    }
+    const ds = j.result || [];
+    const chats = [];
+    ds.forEach(u => {
+      const m = u.message || u.edited_message || u.channel_post;
+      if (m && m.chat && !chats.some(c => c.id === m.chat.id)) chats.push(m.chat);
+    });
+    if (!chats.length){
+      baoTele("#b45309", "Chưa thấy tin nhắn nào. Bấm nút <b>①</b>, trong Telegram bấm <b>Start</b> rồi <b>gửi một tin nhắn bất kỳ</b> cho bot, xong quay lại bấm nút này.");
+      return;
+    }
+    const c = chats[chats.length - 1];
+    G("telegramChatId").value = c.id;
+    const ten = [c.first_name, c.last_name].filter(Boolean).join(" ") || c.title || c.username || "";
+    let chu = "Đã lấy được Chat ID: <b>" + c.id + "</b>" + (ten ? " (" + ten + ")" : "") + ". Giờ bấm nút ③ để gửi thử.";
+    if (chats.length > 1){
+      chu += "<br>Có " + chats.length + " cuộc trò chuyện, tôi lấy cái mới nhất. Nếu sai, chọn lại: " +
+             chats.map(x => '<a href="#" class="chon-chat" data-id="' + x.id + '">' +
+             ((x.first_name || x.title || x.username || x.id)) + '</a>').join(" | ");
+    }
+    baoTele("#15803d", chu);
+    document.querySelectorAll(".chon-chat").forEach(a => a.onclick = ev => {
+      ev.preventDefault();
+      G("telegramChatId").value = a.dataset.id;
+      baoTele("#15803d", "Đã chọn Chat ID: <b>" + a.dataset.id + "</b>");
+    });
+  } catch(e){ baoTele("#b91c1c", "Không kết nối được Telegram. Kiểm tra mạng."); }
+};
+
 /* ---------- Gửi thử Telegram ---------- */
 G("test-tele").onclick = async () => {
-  const token = G("telegramToken").value.trim(), chatId = G("telegramChatId").value.trim();
+  const token = G("telegramToken").value.trim().replace(/^bot/i,""), chatId = G("telegramChatId").value.trim();
   const bao = G("bao-tele"); bao.style.display = "block";
   if (!token || !chatId){ bao.style.color = "#b91c1c"; bao.textContent = "Bạn chưa điền đủ Token và Chat ID."; return; }
   bao.style.color = "#6b7280"; bao.textContent = "Đang gửi...";

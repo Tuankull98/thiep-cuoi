@@ -62,6 +62,6 @@ window.THONG_TIN = {
   ],
   "soNhanTin": "681244977412",
   "nhacMp3": "",
-  "telegramToken": "",
-  "telegramChatId": ""
+  "telegramToken": "9238149424:AAHvgOIFYvmQkElSEf_iNXq0mHsEy1mCdUQ",
+  "telegramChatId": "5277207187"
 };

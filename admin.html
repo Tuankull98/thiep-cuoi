@@ -633,6 +633,9 @@ G("lay-id").onclick = async () => {
   G("gh-token").value = localStorage.getItem("gh_token") || "";
 })();
 
+function goc0(){
+  return location.href.replace(/admin\.html.*$/, "").replace(/\?.*$/,"").replace(/\/?$/, "/");
+}
 function baoGH(mau, chu){
   const b = G("bao-gh"); b.style.display = "block"; b.style.color = mau; b.innerHTML = chu;
 }
@@ -673,16 +676,32 @@ G("luu-web").onclick = async () => {
   localStorage.setItem("gh_token", token);
 
   const nut = G("luu-web"); nut.disabled = true;
-  const noiDung = thuThap();
+  docForm();
+  const phienBan = Date.now();
   try{
+    /* Ảnh được lưu thành file riêng, không nhúng vào data.js nữa.
+       Nhờ vậy data.js chỉ còn vài KB và thiệp mở nhanh hơn nhiều.      */
+    const dsAnh = [
+      ["anhNen",    "anh-bia.jpg"],
+      ["anhChuRe",  "anh-chure.jpg"],
+      ["anhCoDau",  "anh-codau.jpg"]
+    ];
+    for (const [khoa, tenFile] of dsAnh){
+      if (DL[khoa] && DL[khoa].startsWith("data:")){
+        baoGH("#6b7280", "Đang lưu " + tenFile + "...");
+        await ghGhiFile(owner, repo, tenFile, DL[khoa].split(",")[1], token, "Cap nhat " + tenFile);
+        DL[khoa] = tenFile + "?v=" + phienBan;
+      }
+    }
+
     baoGH("#6b7280", "Đang lưu data.js...");
+    const noiDung = "/* File thông tin thiệp cưới — tạo tự động từ admin.html */\nwindow.THONG_TIN = " +
+                    JSON.stringify(DL, null, 2) + ";\n";
     await ghGhiFile(owner, repo, "data.js", b64Chu(noiDung), token, "Cap nhat thong tin thiep cuoi");
 
-    if (DL.anhNen && DL.anhNen.startsWith("data:")){
-      baoGH("#6b7280", "Đang lưu ảnh bìa anh-bia.jpg...");
-      await ghGhiFile(owner, repo, "anh-bia.jpg", DL.anhNen.split(",")[1], token, "Cap nhat anh bia");
-    }
-    baoGH("#15803d", "Đã lưu lên website! Đợi khoảng 1–2 phút rồi mở lại link thiệp (nhớ Ctrl+F5).");
+    try { localStorage.setItem(KHOA_NHAP, JSON.stringify(DL)); } catch(e){}
+    baoGH("#15803d", "Đã lưu lên website! Đợi 1–2 phút cho GitHub cập nhật, rồi mở link thiệp.<br>" +
+      'Kiểm tra ngay: <a href="' + goc0() + '?v=' + phienBan + '" target="_blank"><b>mở thiệp bản mới</b></a>');
   } catch(e){
     baoGH("#b91c1c", "Lỗi: " + e.message + "<br>Bạn vẫn có thể dùng cách thủ công ở khung dưới.");
   }

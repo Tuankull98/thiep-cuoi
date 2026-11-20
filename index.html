@@ -14,7 +14,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="data.js"></script>
+<script>
+/* Mở thiệp kèm ?v=... sẽ ép trình duyệt tải lại data.js mới, bỏ qua bộ nhớ đệm.
+   Khách bình thường vẫn dùng bộ nhớ đệm để trang mở nhanh. */
+(function(){
+  var v = new URLSearchParams(location.search).get("v");
+  document.write('<scr' + 'ipt src="data.js' + (v ? "?v=" + encodeURIComponent(v) : "") + '"><\/scr' + 'ipt>');
+})();
+</script>
 <style>
   :root{
     --kem:#f7f3ea; --xanh-dam:#14213d; --vang:#c9a961;

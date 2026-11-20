@@ -290,6 +290,7 @@ G("xem-thu").onclick = () => {
 };
 
 /* ---------- Telegram: mở bot, lấy Chat ID tự động ---------- */
+let TEN_BOT = "";
 function baoTele(mau, chu){
   const b = G("bao-tele"); b.style.display = "block"; b.style.color = mau; b.innerHTML = chu;
 }
@@ -313,6 +314,10 @@ G("mo-bot").onclick = async () => {
       return;
     }
     const ten = j.result.username;
+    TEN_BOT = ten;
+    /* Nếu ô Chat ID đang chứa tên bot thì xoá đi — đó là lỗi hay gặp */
+    const idHienTai = G("telegramChatId").value.trim().replace("@","").toLowerCase();
+    if (idHienTai === ten.toLowerCase()) G("telegramChatId").value = "";
     baoTele("#15803d", "Tìm thấy bot <b>@" + ten + "</b>. Đang mở Telegram... Hãy bấm <b>Start</b> rồi gửi một tin nhắn bất kỳ, sau đó quay lại bấm nút ②.");
     window.open("https://t.me/" + ten, "_blank");
   } catch(e){ baoTele("#b91c1c", "Không kết nối được Telegram. Kiểm tra mạng."); }
@@ -360,6 +365,10 @@ G("test-tele").onclick = async () => {
   const token = G("telegramToken").value.trim().replace(/^bot/i,""), chatId = G("telegramChatId").value.trim();
   const bao = G("bao-tele"); bao.style.display = "block";
   if (!token || !chatId){ bao.style.color = "#b91c1c"; bao.textContent = "Bạn chưa điền đủ Token và Chat ID."; return; }
+  if (/bot$/i.test(chatId.replace("@","")) || (TEN_BOT && chatId.replace("@","").toLowerCase() === TEN_BOT.toLowerCase())){
+    baoTele("#b91c1c", "Ô <b>Chat ID</b> đang chứa tên của chính con bot. Chat ID phải là <b>một dãy số</b> — ID tài khoản Telegram của bạn.<br>Hãy xoá trống ô đó, bấm <b>①</b> rồi <b>Start</b> và gửi một tin nhắn cho bot, sau đó bấm <b>②</b> để lấy tự động.");
+    return;
+  }
   bao.style.color = "#6b7280"; bao.textContent = "Đang gửi...";
   try{
     const r = await fetch("https://api.telegram.org/bot"+token+"/sendMessage", {

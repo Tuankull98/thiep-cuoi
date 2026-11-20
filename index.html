@@ -3,169 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thiệp cưới Linh Thộn & Thốn Lù</title>
+<title>Thiệp cưới</title>
 <meta name="description" content="Trân trọng kính mời bạn đến dự lễ thành hôn của chúng tôi">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="data.js"></script>
 <style>
   :root{
-    --kem:#f7f3ea;
-    --xanh-dam:#14213d;
-    --vang:#c9a961;
-    --vang-sang:#e8d9a8;
-    --chu:#2c3447;
-    --chu-nhat:#6b7280;
+    --kem:#f7f3ea; --xanh-dam:#14213d; --vang:#c9a961;
+    --vang-sang:#e8d9a8; --chu:#2c3447; --chu-nhat:#6b7280;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    font-family:'Be Vietnam Pro',system-ui,sans-serif;
-    background:var(--kem);
-    color:var(--chu);
-    overflow-x:hidden;
-    line-height:1.7;
-  }
+  body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--kem);color:var(--chu);overflow-x:hidden;line-height:1.7}
   .script{font-family:'Dancing Script',cursive}
 
-  /* ============ 1. MÀN HÌNH ĐẦU: ẢNH + SAO RƠI ============ */
-  #hero{
-    position:relative;
-    min-height:100svh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    overflow:hidden;
-    padding:48px 20px;
-  }
-  #hero-bg{
-    position:absolute;inset:0;
-    background-image:url('anh-cuoi.png');
-    background-size:cover;
-    background-position:center 22%;
-    transform:scale(1.08);
-    filter:brightness(.62) saturate(1.05);
-  }
-  #hero-bg::after{
-    content:'';position:absolute;inset:0;
-    background:
-      radial-gradient(ellipse at 50% 35%, rgba(20,33,61,.15), rgba(10,15,30,.72) 70%),
-      linear-gradient(to bottom, rgba(10,15,30,.55), rgba(10,15,30,.25) 40%, rgba(10,15,30,.88));
-  }
+  /* ---------- MÀN HÌNH ĐẦU ---------- */
+  #hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:48px 20px}
+  #hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 22%;transform:scale(1.08);filter:brightness(.62) saturate(1.05);background-color:#14213d}
+  #hero-bg::after{content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 35%, rgba(20,33,61,.15), rgba(10,15,30,.72) 70%),
+               linear-gradient(to bottom, rgba(10,15,30,.55), rgba(10,15,30,.25) 40%, rgba(10,15,30,.88));}
   #stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 
-  /* ---- CHỮ CHẠY TỪ TRÊN XUỐNG, Ở GIỮA MÀN HÌNH ---- */
-  #chu-roi{
-    position:absolute;
-    left:50%;
-    top:-20%;
-    transform:translateX(-50%);
-    z-index:5;
-    pointer-events:none;
-    font-family:'Dancing Script',cursive;
-    font-size:clamp(2.4rem,9vw,4.6rem);
-    font-weight:700;
-    white-space:nowrap;
+  #chu-roi{position:absolute;left:50%;top:-20%;transform:translateX(-50%);z-index:5;pointer-events:none;
+    font-family:'Dancing Script',cursive;font-size:clamp(2.4rem,9vw,4.6rem);font-weight:700;white-space:nowrap;
     color:var(--vang-sang);
-    text-shadow:0 0 18px rgba(201,169,97,.9), 0 0 42px rgba(201,169,97,.55), 0 2px 10px rgba(0,0,0,.6);
-    animation:chu-roi-xuong 10s linear infinite;
-  }
-  @keyframes chu-roi-xuong{
-    0%   {top:-20%; opacity:0}
-    8%   {opacity:1}
-    88%  {opacity:1}
-    100% {top:110%; opacity:0}
-  }
+    text-shadow:0 0 18px rgba(201,169,97,.9),0 0 42px rgba(201,169,97,.55),0 2px 10px rgba(0,0,0,.6);
+    animation:chu-roi-xuong 10s linear infinite}
+  @keyframes chu-roi-xuong{0%{top:-20%;opacity:0}8%{opacity:1}88%{opacity:1}100%{top:110%;opacity:0}}
 
   .hero-noi-dung{position:relative;z-index:3;color:#fff;max-width:720px}
-  .hero-nho{
-    font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;
-    color:var(--vang-sang);margin-bottom:22px;
-  }
-  .hero-ten{
-    font-size:clamp(3rem,13vw,6.2rem);
-    font-weight:600;line-height:1.05;
-    text-shadow:0 2px 30px rgba(0,0,0,.5);
-  }
+  .hero-nho{font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;color:var(--vang-sang);margin-bottom:22px}
+  .hero-ten{font-size:clamp(3rem,13vw,6.2rem);font-weight:600;line-height:1.05;text-shadow:0 2px 30px rgba(0,0,0,.5)}
   .hero-va{display:block;font-size:.45em;color:var(--vang);margin:2px 0}
-  .hero-ngay{
-    margin-top:26px;display:inline-flex;align-items:center;gap:18px;
-    border-top:1px solid rgba(255,255,255,.35);
-    border-bottom:1px solid rgba(255,255,255,.35);
-    padding:12px 8px;letter-spacing:.2em;font-size:.82rem;text-transform:uppercase;
-  }
+  .hero-ngay{margin-top:26px;display:inline-flex;align-items:center;gap:18px;border-top:1px solid rgba(255,255,255,.35);
+    border-bottom:1px solid rgba(255,255,255,.35);padding:12px 8px;letter-spacing:.2em;font-size:.82rem;text-transform:uppercase}
   .hero-ngay .so{font-size:2.4rem;letter-spacing:0;font-weight:300;line-height:1}
   .hero-ngay span.vach{width:1px;height:38px;background:rgba(255,255,255,.4)}
   .hero-dd{margin-top:18px;font-size:.9rem;color:rgba(255,255,255,.85)}
 
-  /* đếm ngược */
-  #dem-nguoc{
-    position:relative;z-index:3;display:flex;gap:10px;margin-top:34px;flex-wrap:wrap;justify-content:center;
-  }
-  #dem-nguoc .o{
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.25);
-    backdrop-filter:blur(6px);
-    border-radius:12px;padding:12px 16px;min-width:76px;color:#fff;
-  }
+  #dem-nguoc{position:relative;z-index:3;display:flex;gap:10px;margin-top:34px;flex-wrap:wrap;justify-content:center}
+  #dem-nguoc .o{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px);
+    border-radius:12px;padding:12px 16px;min-width:76px;color:#fff}
   #dem-nguoc .o b{display:block;font-size:1.7rem;font-weight:400;line-height:1.2}
   #dem-nguoc .o i{font-style:normal;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--vang-sang)}
-  .mui-ten{
-    position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
-    z-index:3;color:rgba(255,255,255,.7);font-size:1.4rem;
-    animation:nhun 2s ease-in-out infinite;text-decoration:none;
-  }
+  .mui-ten{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:3;color:rgba(255,255,255,.7);
+    font-size:1.4rem;animation:nhun 2s ease-in-out infinite;text-decoration:none}
   @keyframes nhun{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,10px)}}
 
-  /* ---- NÚT NHẠC ---- */
-  #nut-nhac{
-    position:fixed;right:18px;bottom:18px;z-index:50;
-    width:54px;height:54px;border-radius:50%;cursor:pointer;
-    border:1px solid rgba(201,169,97,.8);
-    background:rgba(20,33,61,.82);color:var(--vang-sang);
-    font-size:1.3rem;display:flex;align-items:center;justify-content:center;
-    backdrop-filter:blur(8px);box-shadow:0 6px 24px rgba(0,0,0,.28);
-    transition:transform .25s, background .25s;
-  }
+  #nut-nhac{position:fixed;right:18px;bottom:18px;z-index:50;width:54px;height:54px;border-radius:50%;cursor:pointer;
+    border:1px solid rgba(201,169,97,.8);background:rgba(20,33,61,.82);color:var(--vang-sang);font-size:1.3rem;
+    display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);box-shadow:0 6px 24px rgba(0,0,0,.28);
+    transition:transform .25s,background .25s}
   #nut-nhac:hover{transform:scale(1.08);background:var(--vang);color:var(--xanh-dam)}
   #nut-nhac.dang-phat{animation:xoay-nhac 4s linear infinite}
   @keyframes xoay-nhac{to{transform:rotate(360deg)}}
 
-  /* ============ KHUNG CHUNG CÁC PHẦN ============ */
+  /* ---------- KHUNG CHUNG ---------- */
   section{padding:84px 20px;position:relative}
   .khung{max-width:960px;margin:0 auto}
   .tieu-de{text-align:center;margin-bottom:46px}
-  .tieu-de .nho{
-    font-size:.68rem;letter-spacing:.38em;text-transform:uppercase;color:var(--vang);
-  }
-  .tieu-de h2{
-    font-family:'Dancing Script',cursive;
-    font-size:clamp(2.1rem,6vw,3.1rem);font-weight:600;color:var(--xanh-dam);margin-top:6px;
-  }
+  .tieu-de .nho{font-size:.68rem;letter-spacing:.38em;text-transform:uppercase;color:var(--vang)}
+  .tieu-de h2{font-family:'Dancing Script',cursive;font-size:clamp(2.1rem,6vw,3.1rem);font-weight:600;color:var(--xanh-dam);margin-top:6px}
   .hoa-van{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px}
   .hoa-van i{display:block;width:46px;height:1px;background:var(--vang);opacity:.6}
   .hoa-van b{color:var(--vang);font-size:.8rem}
 
-  /* lời mời */
   #loi-moi{background:#fff}
-  .loi-moi-text{
-    text-align:center;max-width:640px;margin:0 auto;font-size:1.02rem;color:#4b5563;
-  }
+  .loi-moi-text{text-align:center;max-width:640px;margin:0 auto;font-size:1.02rem;color:#4b5563}
   .loi-moi-text .cau{font-family:'Dancing Script',cursive;font-size:1.7rem;color:var(--xanh-dam);margin-bottom:18px}
 
-  /* ============ CÔ DÂU – CHÚ RỂ ============ */
   .cap-doi{display:grid;grid-template-columns:1fr auto 1fr;gap:26px;align-items:start}
   @media(max-width:760px){.cap-doi{grid-template-columns:1fr}}
-  .nguoi{
-    background:#fff;border:1px solid #ece5d6;border-radius:18px;
-    padding:28px 24px;text-align:center;box-shadow:0 10px 40px rgba(20,33,61,.06);
-  }
-  .nguoi .anh{
-    width:132px;height:132px;border-radius:50%;object-fit:cover;object-position:center 20%;
-    border:3px solid var(--vang);padding:4px;background:#fff;margin:0 auto 16px;display:block;
-  }
+  .nguoi{background:#fff;border:1px solid #ece5d6;border-radius:18px;padding:28px 24px;text-align:center;box-shadow:0 10px 40px rgba(20,33,61,.06)}
+  .nguoi .anh{width:132px;height:132px;border-radius:50%;object-fit:cover;object-position:center 20%;
+    border:3px solid var(--vang);padding:4px;background:#fff;margin:0 auto 16px;display:block}
   .nguoi .vai{font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;color:var(--vang)}
   .nguoi h3{font-family:'Dancing Script',cursive;font-size:2.1rem;font-weight:600;color:var(--xanh-dam);margin:4px 0 14px}
   .bang-tt{width:100%;font-size:.9rem;text-align:left;border-collapse:collapse}
@@ -173,22 +87,15 @@
   .bang-tt td:first-child{color:var(--chu-nhat);width:38%;font-size:.84rem}
   .bang-tt td:last-child{font-weight:500}
   .bang-tt tr:last-child td{border-bottom:none}
-  .trai-tim{
-    display:flex;align-items:center;justify-content:center;color:var(--vang);font-size:1.6rem;
-    padding-top:120px;animation:dap 1.6s ease-in-out infinite;
-  }
+  .trai-tim{display:flex;align-items:center;justify-content:center;color:var(--vang);font-size:1.6rem;padding-top:120px;animation:dap 1.6s ease-in-out infinite}
   @media(max-width:760px){.trai-tim{padding:0}}
   @keyframes dap{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
 
-  /* ============ SỰ KIỆN ============ */
   #su-kien{background:var(--xanh-dam);color:#fff;overflow:hidden}
   #su-kien .tieu-de h2{color:#fff}
   #su-kien .tieu-de .nho,#su-kien .hoa-van b{color:var(--vang-sang)}
   .ds-su-kien{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-  .the-sk{
-    background:rgba(255,255,255,.06);border:1px solid rgba(201,169,97,.35);
-    border-radius:16px;padding:26px 22px;text-align:center;
-  }
+  .the-sk{background:rgba(255,255,255,.06);border:1px solid rgba(201,169,97,.35);border-radius:16px;padding:26px 22px;text-align:center}
   .the-sk .icon{font-size:1.7rem}
   .the-sk h4{font-family:'Dancing Script',cursive;font-size:1.8rem;font-weight:600;color:var(--vang-sang);margin:8px 0 14px}
   .the-sk .gio{font-size:1.5rem;font-weight:300;letter-spacing:.06em}
@@ -196,75 +103,59 @@
   .the-sk .am{font-size:.76rem;color:var(--vang);font-style:italic}
   .the-sk .noi{margin-top:14px;font-weight:500}
   .the-sk .dc{font-size:.85rem;color:rgba(255,255,255,.72);margin-top:4px}
-  .nut-map{
-    display:inline-block;margin-top:16px;padding:9px 20px;border:1px solid var(--vang);
-    color:var(--vang-sang);border-radius:40px;text-decoration:none;font-size:.78rem;
-    letter-spacing:.12em;text-transform:uppercase;transition:.25s;
-  }
+  .nut-map{display:inline-block;margin-top:16px;padding:9px 20px;border:1px solid var(--vang);color:var(--vang-sang);
+    border-radius:40px;text-decoration:none;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;transition:.25s}
   .nut-map:hover{background:var(--vang);color:var(--xanh-dam)}
 
-  /* ============ XÁC NHẬN THAM DỰ ============ */
   #rsvp{background:#fff}
   .form-rsvp{max-width:560px;margin:0 auto}
   .hang{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:560px){.hang{grid-template-columns:1fr}}
   .o-nhap{margin-bottom:14px}
   .o-nhap label{display:block;font-size:.78rem;letter-spacing:.08em;color:var(--chu-nhat);margin-bottom:6px}
-  .o-nhap input,.o-nhap select,.o-nhap textarea{
-    width:100%;padding:12px 14px;border:1px solid #e2dccd;border-radius:10px;
-    font-family:inherit;font-size:.95rem;background:#fdfcf8;color:var(--chu);
-  }
+  .o-nhap input,.o-nhap select,.o-nhap textarea{width:100%;padding:12px 14px;border:1px solid #e2dccd;border-radius:10px;
+    font-family:inherit;font-size:.95rem;background:#fdfcf8;color:var(--chu)}
   .o-nhap input:focus,.o-nhap select:focus,.o-nhap textarea:focus{outline:2px solid var(--vang);border-color:transparent}
   .o-nhap textarea{min-height:92px;resize:vertical}
-  .nut-gui{
-    width:100%;padding:14px;border:none;border-radius:40px;background:var(--xanh-dam);color:#fff;
-    font-family:inherit;font-size:.86rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:.25s;
-  }
+  .nut-gui{width:100%;padding:14px;border:none;border-radius:40px;background:var(--xanh-dam);color:#fff;font-family:inherit;
+    font-size:.86rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:.25s}
   .nut-gui:hover{background:var(--vang);color:var(--xanh-dam)}
+  .nut-gui:disabled{opacity:.6;cursor:wait}
   #ket-qua{margin-top:18px;text-align:center;font-size:.95rem;display:none}
   #ket-qua.hien{display:block}
   .lien-he{text-align:center;margin-top:26px;font-size:.9rem;color:var(--chu-nhat)}
   .lien-he a{color:var(--xanh-dam);text-decoration:none;border-bottom:1px solid var(--vang)}
 
-  /* ============ CHÂN TRANG ============ */
-  footer{
-    background:var(--xanh-dam);color:rgba(255,255,255,.8);text-align:center;padding:56px 20px;position:relative;overflow:hidden;
-  }
+  footer{background:var(--xanh-dam);color:rgba(255,255,255,.8);text-align:center;padding:56px 20px;position:relative;overflow:hidden}
   footer .script{font-size:2.4rem;color:var(--vang-sang)}
   footer p{font-size:.86rem;margin-top:10px}
   #stars2{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.8}
   footer .noi-dung{position:relative;z-index:2}
 
-  /* hiệu ứng hiện dần khi cuộn */
   .hien-dan{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
   .hien-dan.vao{opacity:1;transform:none}
 </style>
 </head>
 <body>
 
-<!-- ======================= 1. MÀN HÌNH ĐẦU ======================= -->
 <header id="hero">
   <div id="hero-bg"></div>
   <canvas id="stars"></canvas>
-
-  <!-- chữ chạy từ trên xuống, ở giữa màn hình -->
-  <div id="chu-roi">Tuấn Kull</div>
+  <div id="chu-roi"></div>
 
   <div class="hero-noi-dung">
     <p class="hero-nho">Save the date</p>
     <h1 class="hero-ten script">
-      <span id="ten-co-dau">Linh Thộn</span>
+      <span id="ten-co-dau"></span>
       <span class="hero-va">&</span>
-      <span id="ten-chu-re">Thốn Lù</span>
+      <span id="ten-chu-re"></span>
     </h1>
     <div class="hero-ngay">
-      <span id="hero-thu">Chủ Nhật</span>
-      <span class="vach"></span>
-      <span class="so" id="hero-ngay-so">20.12</span>
-      <span class="vach"></span>
-      <span id="hero-gio">18:00</span>
+      <span id="hero-thu"></span><span class="vach"></span>
+      <span class="so" id="hero-ngay-so"></span><span class="vach"></span>
+      <span id="hero-gio"></span>
     </div>
-    <p class="hero-dd" id="hero-dia-diem">Trung tâm tiệc cưới Hoàng Gia — Hà Nội</p>
+    <p class="hero-dd" id="hero-dia-diem"></p>
   </div>
 
   <div id="dem-nguoc">
@@ -277,10 +168,8 @@
   <a href="#loi-moi" class="mui-ten" aria-label="Cuộn xuống">&#8964;</a>
 </header>
 
-<!-- nút bật/tắt nhạc -->
 <button id="nut-nhac" title="Bật / tắt nhạc">&#9834;</button>
 
-<!-- ======================= 2. LỜI MỜI ======================= -->
 <section id="loi-moi">
   <div class="khung hien-dan">
     <div class="tieu-de">
@@ -289,14 +178,12 @@
       <div class="hoa-van"><i></i><b>&#10070;</b><i></i></div>
     </div>
     <div class="loi-moi-text">
-      <p class="cau">“Yêu nhau là cùng nhìn về một hướng”</p>
-      <p>Chúng tôi sẽ thật hạnh phúc nếu có sự hiện diện của bạn trong ngày trọng đại của cuộc đời mình.
-         Sự có mặt của bạn là niềm vinh hạnh lớn cho gia đình chúng tôi.</p>
+      <p class="cau" id="cau-dan"></p>
+      <p id="loi-moi-text"></p>
     </div>
   </div>
 </section>
 
-<!-- ======================= 3. CÔ DÂU & CHÚ RỂ ======================= -->
 <section id="cap-doi-sec">
   <div class="khung hien-dan">
     <div class="tieu-de">
@@ -304,11 +191,10 @@
       <h2>Đôi lời giới thiệu</h2>
       <div class="hoa-van"><i></i><b>&#10070;</b><i></i></div>
     </div>
-    <div class="cap-doi" id="cap-doi"><!-- JS tự đổ dữ liệu vào đây --></div>
+    <div class="cap-doi" id="cap-doi"></div>
   </div>
 </section>
 
-<!-- ======================= 4. THỜI GIAN & ĐỊA ĐIỂM ======================= -->
 <section id="su-kien">
   <div class="khung hien-dan">
     <div class="tieu-de">
@@ -320,7 +206,6 @@
   </div>
 </section>
 
-<!-- ======================= 5. XÁC NHẬN THAM DỰ ======================= -->
 <section id="rsvp">
   <div class="khung hien-dan">
     <div class="tieu-de">
@@ -341,33 +226,24 @@
         </div>
         <div class="o-nhap">
           <label for="f-so">Số người tham dự</label>
-          <select id="f-so">
-            <option>1 người</option><option>2 người</option>
-            <option>3 người</option><option>4 người</option><option>5 người trở lên</option>
-          </select>
+          <select id="f-so"><option>1 người</option><option>2 người</option><option>3 người</option><option>4 người</option><option>5 người trở lên</option></select>
         </div>
       </div>
       <div class="hang">
         <div class="o-nhap">
           <label for="f-du">Bạn sẽ đến chứ?</label>
-          <select id="f-du">
-            <option>Chắc chắn có mặt</option>
-            <option>Cố gắng sắp xếp</option>
-            <option>Rất tiếc không đến được</option>
-          </select>
+          <select id="f-du"><option>Chắc chắn có mặt</option><option>Cố gắng sắp xếp</option><option>Rất tiếc không đến được</option></select>
         </div>
         <div class="o-nhap">
           <label for="f-ben">Bạn là khách mời của</label>
-          <select id="f-ben">
-            <option>Nhà trai</option><option>Nhà gái</option><option>Cả hai</option>
-          </select>
+          <select id="f-ben"><option>Nhà trai</option><option>Nhà gái</option><option>Cả hai</option></select>
         </div>
       </div>
       <div class="o-nhap">
         <label for="f-chuc">Lời chúc gửi đến cô dâu chú rể</label>
         <textarea id="f-chuc" placeholder="Chúc hai bạn trăm năm hạnh phúc..."></textarea>
       </div>
-      <button type="submit" class="nut-gui">Gửi xác nhận</button>
+      <button type="submit" class="nut-gui" id="nut-submit">Gửi xác nhận</button>
       <div id="ket-qua"></div>
     </form>
 
@@ -375,7 +251,6 @@
   </div>
 </section>
 
-<!-- ======================= 6. CHÂN TRANG ======================= -->
 <footer>
   <canvas id="stars2"></canvas>
   <div class="noi-dung">
@@ -386,288 +261,175 @@
 </footer>
 
 <script>
-/* ============================================================
-   PHẦN A — BẢNG THÔNG TIN: BẠN CHỈ CẦN SỬA TRONG KHUNG NÀY
-   ============================================================ */
-const THONG_TIN = {
-  chuRe: {
-    tenGoi: "Thốn Lù",
-    hoTen:  "Thốn Lù",
-    namSinh: 2000,
-    ngheNghiep: "",                       // để trống thì dòng này tự ẩn
-    diaChi: "31L Láng Hạ, Hà Nội",
-    bo: "",
-    me: "",
-    dienThoai: "681244977412"
-  },
-  coDau: {
-    tenGoi: "Linh Thộn",
-    hoTen:  "Linh Thộn",
-    namSinh: 1997,
-    ngheNghiep: "",
-    diaChi: "298 Nguyễn Thiện Thuật",
-    bo: "",
-    me: "",
-    dienThoai: "681244977412"
-  },
-
-  // Dòng chữ chạy từ trên xuống giữa màn hình
-  chuChay: "Tuấn Kull",
-
-  // Ngày giờ chính để đếm ngược. Định dạng: NĂM-THÁNG-NGÀY GIỜ:PHÚT
-  ngayGioChinh: "2026-12-20 18:00",
-  diaDiemChinh: "Trung tâm tiệc cưới Hoàng Gia — Hà Nội",
-
-  suKien: [
-    {
-      icon: "🏮", ten: "Lễ Vu Quy",
-      gio: "09:00", ngay: "Thứ Bảy, 19/12/2026", amLich: "Nhằm ngày 01/11 năm Bính Ngọ",
-      noi: "Tư gia nhà gái",
-      diaChi: "298 Nguyễn Thiện Thuật",
-      map: "https://www.google.com/maps/search/?api=1&query=298+Nguyen+Thien+Thuat"
-    },
-    {
-      icon: "💍", ten: "Lễ Thành Hôn",
-      gio: "11:00", ngay: "Chủ Nhật, 20/12/2026", amLich: "Nhằm ngày 02/11 năm Bính Ngọ",
-      noi: "Tư gia nhà trai",
-      diaChi: "31L Láng Hạ, Hà Nội",
-      map: "https://www.google.com/maps/search/?api=1&query=31L+Lang+Ha+Ha+Noi"
-    },
-    {
-      icon: "🥂", ten: "Tiệc Cưới",
-      gio: "18:00", ngay: "Chủ Nhật, 20/12/2026", amLich: "Đón khách từ 17:30",
-      noi: "Trung tâm tiệc cưới Hoàng Gia",
-      diaChi: "Số 1 Phạm Hùng, Q. Nam Từ Liêm, Hà Nội",
-      map: "https://www.google.com/maps/search/?api=1&query=1+Pham+Hung+Nam+Tu+Liem+Ha+Noi"
-    }
-  ],
-
-  // Số điện thoại nhận tin nhắn xác nhận
-  soNhanTin: "681244977412",
-
-  // NHẠC: để trống "" thì dùng đoạn nhạc tự tạo sẵn trong trang.
-  // Nếu bạn có link mp3 riêng, dán vào đây, ví dụ: "https://.../bai-hat.mp3"
-  nhacMp3: ""
-};
-
-/* ============================================================
-   PHẦN B — CODE CHẠY TỰ ĐỘNG (bạn không cần sửa)
-   ============================================================ */
+/* Toàn bộ thông tin nằm ở file data.js — sửa bằng trang admin.html */
+let TT = window.THONG_TIN || {};
+/* Chế độ xem thử từ trang admin (chỉ chạy khi mở bằng nút "Xem thử") */
+if (location.search.indexOf("xemthu=1") > -1){
+  try { const xt = sessionStorage.getItem("xem_thu"); if (xt) TT = JSON.parse(xt); } catch(e){}
+}
+const cr = TT.chuRe || {}, cd = TT.coDau || {};
 const namNay = new Date().getFullYear();
-const cr = THONG_TIN.chuRe, cd = THONG_TIN.coDau;
-const dat = (id, giaTri) => { const e = document.getElementById(id); if (e) e.textContent = giaTri; };
+const dat = (id,v)=>{const e=document.getElementById(id); if(e) e.textContent=v;};
 
-/* --- B1. Tên ở màn hình đầu, tiêu đề, chân trang, chữ chạy --- */
-dat("ten-chu-re", cr.tenGoi);
-dat("ten-co-dau", cd.tenGoi);
-dat("chu-roi", THONG_TIN.chuChay);
-dat("hero-dia-diem", THONG_TIN.diaDiemChinh);
-dat("chan-ten", (cd.tenGoi + " & " + cr.tenGoi).toUpperCase() + " — " + namNay);
-document.title = "Thiệp cưới " + cd.tenGoi + " & " + cr.tenGoi;
+/* --- Ảnh nền --- */
+document.getElementById("hero-bg").style.backgroundImage = "url('" + (TT.anhNen || "anh-cuoi.png") + "')";
 
-/* --- B2. Thẻ cô dâu / chú rể (dòng nào để trống sẽ tự ẩn) --- */
-function theNguoi(ng, vai){
+/* --- Tên, chữ chạy, lời mời --- */
+dat("ten-chu-re", cr.tenGoi || "");
+dat("ten-co-dau", cd.tenGoi || "");
+dat("chu-roi", TT.chuChay || "");
+dat("hero-dia-diem", TT.diaDiemChinh || "");
+dat("cau-dan", TT.cauDan || "");
+dat("loi-moi-text", TT.loiMoi || "");
+dat("chan-ten", ((cd.tenGoi||"") + " & " + (cr.tenGoi||"")).toUpperCase() + " — " + namNay);
+document.title = "Thiệp cưới " + (cd.tenGoi||"") + " & " + (cr.tenGoi||"");
+
+/* --- Thẻ cô dâu / chú rể (dòng trống tự ẩn) --- */
+function theNguoi(ng, vai, anh){
   const dong = [
-    ["Năm sinh",     ng.namSinh ? ng.namSinh + " (" + (namNay - ng.namSinh) + " tuổi)" : ""],
-    ["Nghề nghiệp",  ng.ngheNghiep],
-    ["Địa chỉ",      ng.diaChi],
-    ["Con ông",      ng.bo],
-    ["Con bà",       ng.me],
-    ["Điện thoại",   ng.dienThoai]
+    ["Năm sinh",    ng.namSinh ? ng.namSinh + " (" + (namNay - ng.namSinh) + " tuổi)" : ""],
+    ["Nghề nghiệp", ng.ngheNghiep],
+    ["Địa chỉ",     ng.diaChi],
+    ["Con ông",     ng.bo],
+    ["Con bà",      ng.me],
+    ["Điện thoại",  ng.dienThoai]
   ].filter(d => d[1]);
-
-  return '<div class="nguoi">' +
-    '<img class="anh" src="anh-cuoi.png" alt="' + vai + '">' +
-    '<p class="vai">' + vai + '</p>' +
-    '<h3>' + ng.hoTen + '</h3>' +
-    '<table class="bang-tt">' +
-      dong.map(d => "<tr><td>" + d[0] + "</td><td>" + d[1] + "</td></tr>").join("") +
-    '</table></div>';
+  return '<div class="nguoi"><img class="anh" src="' + (anh || TT.anhNen || "anh-cuoi.png") + '" alt="' + vai + '">' +
+    '<p class="vai">' + vai + '</p><h3>' + (ng.hoTen || ng.tenGoi || "") + '</h3>' +
+    '<table class="bang-tt">' + dong.map(d=>"<tr><td>"+d[0]+"</td><td>"+d[1]+"</td></tr>").join("") + '</table></div>';
 }
 document.getElementById("cap-doi").innerHTML =
-  theNguoi(cr, "Chú rể") + '<div class="trai-tim">&#10084;</div>' + theNguoi(cd, "Cô dâu");
+  theNguoi(cr,"Chú rể",TT.anhChuRe) + '<div class="trai-tim">&#10084;</div>' + theNguoi(cd,"Cô dâu",TT.anhCoDau);
 
-/* --- B3. Dòng liên hệ --- */
-const dsLienHe = [];
-if (cr.dienThoai) dsLienHe.push('<a href="tel:' + cr.dienThoai + '">Chú rể ' + cr.dienThoai + '</a>');
-if (cd.dienThoai && cd.dienThoai !== cr.dienThoai)
-  dsLienHe.push('<a href="tel:' + cd.dienThoai + '">Cô dâu ' + cd.dienThoai + '</a>');
-document.getElementById("lien-he").innerHTML = "Hoặc liên hệ trực tiếp: " + dsLienHe.join(" &nbsp;•&nbsp; ");
+/* --- Liên hệ --- */
+const ds = [];
+if (cr.dienThoai) ds.push('<a href="tel:'+cr.dienThoai+'">Chú rể '+cr.dienThoai+'</a>');
+if (cd.dienThoai && cd.dienThoai !== cr.dienThoai) ds.push('<a href="tel:'+cd.dienThoai+'">Cô dâu '+cd.dienThoai+'</a>');
+if (ds.length) document.getElementById("lien-he").innerHTML = "Hoặc liên hệ trực tiếp: " + ds.join(" &nbsp;•&nbsp; ");
 
-/* --- B4. Ngày giờ ở màn hình đầu --- */
-const MOC = new Date(THONG_TIN.ngayGioChinh.replace(" ", "T") + ":00");
+/* --- Ngày giờ + đếm ngược --- */
+const MOC = new Date(String(TT.ngayGioChinh||"2027-01-01 18:00").replace(" ","T") + ":00");
 const THU = ["Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
 dat("hero-thu", THU[MOC.getDay()]);
-dat("hero-ngay-so", String(MOC.getDate()).padStart(2,"0") + "." + String(MOC.getMonth()+1).padStart(2,"0"));
-dat("hero-gio", String(MOC.getHours()).padStart(2,"0") + ":" + String(MOC.getMinutes()).padStart(2,"0"));
-
-/* --- B5. Đếm ngược --- */
+dat("hero-ngay-so", String(MOC.getDate()).padStart(2,"0")+"."+String(MOC.getMonth()+1).padStart(2,"0"));
+dat("hero-gio", String(MOC.getHours()).padStart(2,"0")+":"+String(MOC.getMinutes()).padStart(2,"0"));
 function demNguoc(){
   const conLai = MOC - new Date();
   if (conLai <= 0){
-    document.getElementById("dem-nguoc").innerHTML =
-      '<div class="o" style="min-width:240px"><b style="font-size:1.2rem">Hôm nay là ngày cưới!</b></div>';
+    document.getElementById("dem-nguoc").innerHTML='<div class="o" style="min-width:240px"><b style="font-size:1.2rem">Hôm nay là ngày cưới!</b></div>';
     return;
   }
-  const giay = Math.floor(conLai/1000);
-  dat("d-ngay", String(Math.floor(giay/86400)).padStart(2,"0"));
-  dat("d-gio",  String(Math.floor(giay%86400/3600)).padStart(2,"0"));
-  dat("d-phut", String(Math.floor(giay%3600/60)).padStart(2,"0"));
-  dat("d-giay", String(giay%60).padStart(2,"0"));
+  const g = Math.floor(conLai/1000);
+  dat("d-ngay",String(Math.floor(g/86400)).padStart(2,"0"));
+  dat("d-gio", String(Math.floor(g%86400/3600)).padStart(2,"0"));
+  dat("d-phut",String(Math.floor(g%3600/60)).padStart(2,"0"));
+  dat("d-giay",String(g%60).padStart(2,"0"));
 }
-demNguoc(); setInterval(demNguoc, 1000);
+demNguoc(); setInterval(demNguoc,1000);
 
-/* --- B6. Thẻ sự kiện --- */
-document.getElementById("ds-su-kien").innerHTML = THONG_TIN.suKien.map(sk => `
+/* --- Thẻ sự kiện --- */
+document.getElementById("ds-su-kien").innerHTML = (TT.suKien||[]).map(sk => `
   <div class="the-sk">
-    <div class="icon">${sk.icon}</div>
-    <h4>${sk.ten}</h4>
-    <p class="ngay">${sk.ngay}</p>
-    <p class="gio">${sk.gio}</p>
-    <p class="am">${sk.amLich}</p>
-    <p class="noi">${sk.noi}</p>
-    <p class="dc">${sk.diaChi}</p>
-    <a class="nut-map" href="${sk.map}" target="_blank" rel="noopener">Chỉ đường</a>
+    <div class="icon">${sk.icon||""}</div>
+    <h4>${sk.ten||""}</h4>
+    <p class="ngay">${sk.ngay||""}</p>
+    <p class="gio">${sk.gio||""}</p>
+    <p class="am">${sk.amLich||""}</p>
+    <p class="noi">${sk.noi||""}</p>
+    <p class="dc">${sk.diaChi||""}</p>
+    ${sk.map ? '<a class="nut-map" href="'+sk.map+'" target="_blank" rel="noopener">Chỉ đường</a>' : ''}
   </div>`).join("");
 
-/* --- B7. SAO RƠI --- */
+/* --- Sao rơi --- */
 function taoSaoRoi(idCanvas, soSao, coSaoBang){
-  const canvas = document.getElementById(idCanvas);
-  if (!canvas) return;
+  const canvas = document.getElementById(idCanvas); if(!canvas) return;
   const ctx = canvas.getContext("2d");
-  let W = 0, H = 0, sao = [], bang = [];
-
+  let W=0,H=0,sao=[],bang=[];
   function doKichThuoc(){
     const r = canvas.getBoundingClientRect();
-    W = canvas.width  = Math.max(1, Math.floor(r.width));
-    H = canvas.height = Math.max(1, Math.floor(r.height));
-    sao = [];
-    for (let i = 0; i < soSao; i++) sao.push(saoMoi(true));
+    W = canvas.width = Math.max(1,Math.floor(r.width));
+    H = canvas.height = Math.max(1,Math.floor(r.height));
+    sao = []; for(let i=0;i<soSao;i++) sao.push(saoMoi(true));
   }
-  function saoMoi(ngauNhienY){
-    return {
-      x: Math.random()*W,
-      y: ngauNhienY ? Math.random()*H : -10,
-      r: Math.random()*1.5 + 0.4,
-      v: Math.random()*0.55 + 0.15,
-      nghieng: Math.random()*0.25 - 0.12,
-      sang: Math.random()*0.6 + 0.35,
-      nhayNhanh: Math.random()*0.02 + 0.005
-    };
-  }
-  function saoBangMoi(){
-    return { x: Math.random()*W*0.8, y: Math.random()*H*0.35, dai: 0, maxDai: 110+Math.random()*120, v: 7+Math.random()*5 };
-  }
+  function saoMoi(nY){return{x:Math.random()*W,y:nY?Math.random()*H:-10,r:Math.random()*1.5+0.4,
+    v:Math.random()*0.55+0.15,nghieng:Math.random()*0.25-0.12,sang:Math.random()*0.6+0.35,nhayNhanh:Math.random()*0.02+0.005};}
+  function saoBangMoi(){return{x:Math.random()*W*0.8,y:Math.random()*H*0.35,dai:0,maxDai:110+Math.random()*120,v:7+Math.random()*5};}
   function ve(){
     ctx.clearRect(0,0,W,H);
-    for (const s of sao){
-      s.y += s.v; s.x += s.nghieng;
-      s.sang += (Math.random() - 0.5) * s.nhayNhanh * 12;
-      if (s.sang < 0.2) s.sang = 0.2;
-      if (s.sang > 1)   s.sang = 1;
-      if (s.y > H + 6 || s.x < -6 || s.x > W + 6) Object.assign(s, saoMoi(false));
-
-      ctx.strokeStyle = "rgba(255,255,255," + (s.sang*0.22) + ")";
-      ctx.lineWidth = s.r*0.8;
-      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x - s.nghieng*9, s.y - s.v*9); ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-      ctx.fillStyle = "rgba(255,252,235," + s.sang + ")";
-      ctx.shadowBlur = 8; ctx.shadowColor = "rgba(255,245,210,.9)";
-      ctx.fill(); ctx.shadowBlur = 0;
+    for(const s of sao){
+      s.y+=s.v; s.x+=s.nghieng;
+      s.sang += (Math.random()-0.5)*s.nhayNhanh*12;
+      if(s.sang<0.2)s.sang=0.2; if(s.sang>1)s.sang=1;
+      if(s.y>H+6||s.x<-6||s.x>W+6) Object.assign(s,saoMoi(false));
+      ctx.strokeStyle="rgba(255,255,255,"+(s.sang*0.22)+")"; ctx.lineWidth=s.r*0.8;
+      ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(s.x-s.nghieng*9,s.y-s.v*9); ctx.stroke();
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle="rgba(255,252,235,"+s.sang+")"; ctx.shadowBlur=8; ctx.shadowColor="rgba(255,245,210,.9)";
+      ctx.fill(); ctx.shadowBlur=0;
     }
-    if (coSaoBang){
-      if (bang.length < 1 && Math.random() < 0.004) bang.push(saoBangMoi());
-      for (let i = bang.length - 1; i >= 0; i--){
-        const b = bang[i];
-        b.x += b.v; b.y += b.v*0.55; b.dai = Math.min(b.maxDai, b.dai + b.v*2.2);
-        if (b.x > W + 60 || b.y > H + 60){ bang.splice(i,1); continue; }
-        const g = ctx.createLinearGradient(b.x, b.y, b.x - b.dai, b.y - b.dai*0.55);
-        g.addColorStop(0, "rgba(255,255,255,.95)");
-        g.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.lineCap = "round";
-        ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(b.x - b.dai, b.y - b.dai*0.55); ctx.stroke();
+    if(coSaoBang){
+      if(bang.length<1 && Math.random()<0.004) bang.push(saoBangMoi());
+      for(let i=bang.length-1;i>=0;i--){
+        const b=bang[i]; b.x+=b.v; b.y+=b.v*0.55; b.dai=Math.min(b.maxDai,b.dai+b.v*2.2);
+        if(b.x>W+60||b.y>H+60){bang.splice(i,1);continue;}
+        const g=ctx.createLinearGradient(b.x,b.y,b.x-b.dai,b.y-b.dai*0.55);
+        g.addColorStop(0,"rgba(255,255,255,.95)"); g.addColorStop(1,"rgba(255,255,255,0)");
+        ctx.strokeStyle=g; ctx.lineWidth=2; ctx.lineCap="round";
+        ctx.beginPath(); ctx.moveTo(b.x,b.y); ctx.lineTo(b.x-b.dai,b.y-b.dai*0.55); ctx.stroke();
       }
     }
     requestAnimationFrame(ve);
   }
-  doKichThuoc();
-  window.addEventListener("resize", doKichThuoc);
-  ve();
+  doKichThuoc(); window.addEventListener("resize",doKichThuoc); ve();
 }
-taoSaoRoi("stars", 150, true);
-taoSaoRoi("stars2", 50, false);
+taoSaoRoi("stars",150,true);
+taoSaoRoi("stars2",50,false);
 
-/* --- B8. NHẠC CƯỚI --- */
+/* --- Nhạc --- */
 const nutNhac = document.getElementById("nut-nhac");
-let dangPhat = false, actx = null, hengio = null, theDiv = null;
-
-if (THONG_TIN.nhacMp3) {
-  theDiv = new Audio(THONG_TIN.nhacMp3);
-  theDiv.loop = true;
-}
-
-// Đoạn nhạc vui tươi tự tạo (vòng hoà âm Đô trưởng, lặp lại)
-const HOP_AM = [
-  [261.63, 329.63, 392.00],   // Đô trưởng
-  [220.00, 261.63, 329.63],   // La thứ
-  [174.61, 220.00, 261.63],   // Fa trưởng
-  [196.00, 246.94, 293.66]    // Sol trưởng
-];
-const GIAI_DIEU = [
-  [392.00,.5],[523.25,.5],[659.25,1],[587.33,.5],[523.25,.5],[493.88,1],
-  [440.00,.5],[523.25,.5],[587.33,1],[523.25,.5],[493.88,.5],[392.00,1]
-];
-const NHIP = 0.5, DAI_VONG = 12 * NHIP;
-
-function notMoi(tan, batDau, dai, loai, am){
-  const osc = actx.createOscillator(), gain = actx.createGain();
-  osc.type = loai; osc.frequency.value = tan;
-  gain.gain.setValueAtTime(0, batDau);
-  gain.gain.linearRampToValueAtTime(am, batDau + 0.03);
-  gain.gain.exponentialRampToValueAtTime(0.0001, batDau + dai);
+let dangPhat=false, actx=null, hengio=null, theDiv=null;
+if (TT.nhacMp3){ theDiv = new Audio(TT.nhacMp3); theDiv.loop = true; }
+const HOP_AM=[[261.63,329.63,392.00],[220.00,261.63,329.63],[174.61,220.00,261.63],[196.00,246.94,293.66]];
+const GIAI_DIEU=[[392.00,.5],[523.25,.5],[659.25,1],[587.33,.5],[523.25,.5],[493.88,1],
+                 [440.00,.5],[523.25,.5],[587.33,1],[523.25,.5],[493.88,.5],[392.00,1]];
+const NHIP=0.5, DAI_VONG=12*NHIP;
+function notMoi(tan,batDau,dai,loai,am){
+  const osc=actx.createOscillator(), gain=actx.createGain();
+  osc.type=loai; osc.frequency.value=tan;
+  gain.gain.setValueAtTime(0,batDau);
+  gain.gain.linearRampToValueAtTime(am,batDau+0.03);
+  gain.gain.exponentialRampToValueAtTime(0.0001,batDau+dai);
   osc.connect(gain); gain.connect(actx.destination);
-  osc.start(batDau); osc.stop(batDau + dai + 0.05);
+  osc.start(batDau); osc.stop(batDau+dai+0.05);
 }
 function xepMotVong(t0){
-  let t = t0;
-  GIAI_DIEU.forEach(([tan, phach]) => {
-    notMoi(tan, t, phach * NHIP * 0.95, "triangle", 0.18);
-    t += phach * NHIP;
-  });
-  HOP_AM.forEach((ha, i) => {
-    const batDau = t0 + i * 3 * NHIP;
-    ha.forEach(tan => notMoi(tan / 2, batDau, 3 * NHIP * 0.9, "sine", 0.09));
-  });
+  let t=t0;
+  GIAI_DIEU.forEach(([tan,phach])=>{ notMoi(tan,t,phach*NHIP*0.95,"triangle",0.18); t+=phach*NHIP; });
+  HOP_AM.forEach((ha,i)=>{ const b=t0+i*3*NHIP; ha.forEach(tan=>notMoi(tan/2,b,3*NHIP*0.9,"sine",0.09)); });
 }
 function batNhacTao(){
-  actx = actx || new (window.AudioContext || window.webkitAudioContext)();
-  if (actx.state === "suspended") actx.resume();
-  xepMotVong(actx.currentTime + 0.1);
-  hengio = setInterval(() => { if (dangPhat) xepMotVong(actx.currentTime + 0.05); }, DAI_VONG * 1000);
+  actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+  if(actx.state==="suspended") actx.resume();
+  xepMotVong(actx.currentTime+0.1);
+  hengio = setInterval(()=>{ if(dangPhat) xepMotVong(actx.currentTime+0.05); }, DAI_VONG*1000);
 }
-nutNhac.addEventListener("click", () => {
-  dangPhat = !dangPhat;
-  nutNhac.classList.toggle("dang-phat", dangPhat);
+nutNhac.addEventListener("click",()=>{
+  dangPhat=!dangPhat;
+  nutNhac.classList.toggle("dang-phat",dangPhat);
   nutNhac.innerHTML = dangPhat ? "&#9835;" : "&#9834;";
-  if (theDiv) {
-    dangPhat ? theDiv.play().catch(()=>{}) : theDiv.pause();
-  } else {
-    if (dangPhat) batNhacTao();
-    else { clearInterval(hengio); if (actx) actx.suspend(); }
-  }
+  if(theDiv){ dangPhat ? theDiv.play().catch(()=>{}) : theDiv.pause(); }
+  else { if(dangPhat) batNhacTao(); else { clearInterval(hengio); if(actx) actx.suspend(); } }
 });
 
-/* --- B9. Hiện dần khi cuộn --- */
-const theoDoi = new IntersectionObserver(ds => {
-  ds.forEach(d => { if (d.isIntersecting) d.target.classList.add("vao"); });
-}, { threshold: 0.12 });
-document.querySelectorAll(".hien-dan").forEach(e => theoDoi.observe(e));
+/* --- Hiện dần khi cuộn --- */
+const theoDoi = new IntersectionObserver(d=>{d.forEach(x=>{if(x.isIntersecting)x.target.classList.add("vao")})},{threshold:0.12});
+document.querySelectorAll(".hien-dan").forEach(e=>theoDoi.observe(e));
 
-/* --- B10. Form xác nhận tham dự --- */
-document.getElementById("form-rsvp").addEventListener("submit", function(e){
+/* --- Form xác nhận: gửi về Telegram --- */
+document.getElementById("form-rsvp").addEventListener("submit", async function(e){
   e.preventDefault();
+  const nut = document.getElementById("nut-submit");
+  const kq  = document.getElementById("ket-qua");
   const ten  = document.getElementById("f-ten").value.trim();
   const sdt  = document.getElementById("f-sdt").value.trim();
   const so   = document.getElementById("f-so").value;
@@ -676,23 +438,43 @@ document.getElementById("form-rsvp").addEventListener("submit", function(e){
   const chuc = document.getElementById("f-chuc").value.trim();
   if (!ten) return;
 
+  const gio = new Date().toLocaleString("vi-VN");
   const noiDung =
-    "XÁC NHẬN DỰ CƯỚI\n" +
-    "Tên: " + ten + "\n" +
-    (sdt ? "SĐT: " + sdt + "\n" : "") +
-    "Khách của: " + ben + "\n" +
-    "Tham dự: " + du + " (" + so + ")\n" +
-    (chuc ? "Lời chúc: " + chuc : "");
+    "🎉 XÁC NHẬN DỰ CƯỚI\n" +
+    "👤 Tên: " + ten + "\n" +
+    (sdt ? "📞 SĐT: " + sdt + "\n" : "") +
+    "🏠 Khách của: " + ben + "\n" +
+    "✅ Tham dự: " + du + " (" + so + ")\n" +
+    (chuc ? "💌 Lời chúc: " + chuc + "\n" : "") +
+    "🕒 Gửi lúc: " + gio;
 
-  const linkSMS = "sms:" + THONG_TIN.soNhanTin + "?&body=" + encodeURIComponent(noiDung);
-  const kq = document.getElementById("ket-qua");
   kq.className = "hien";
-  kq.innerHTML =
-    '<p style="color:#14213d"><b>Cảm ơn ' + ten + '!</b> Bấm nút bên dưới để gửi xác nhận đến gia đình.</p>' +
-    '<a href="' + linkSMS + '" class="nut-map" style="border-color:#14213d;color:#14213d;display:inline-block;margin-top:12px">Gửi tin nhắn xác nhận</a>' +
-    '<p style="margin-top:12px;font-size:.82rem;color:#6b7280">Hoặc gọi trực tiếp cho cô dâu / chú rể ở phía dưới.</p>';
+  let daGui = false;
 
-  try { localStorage.setItem("rsvp_" + Date.now(), noiDung); } catch (err) {}
+  if (TT.telegramToken && TT.telegramChatId){
+    nut.disabled = true; nut.textContent = "Đang gửi...";
+    try{
+      const res = await fetch("https://api.telegram.org/bot" + TT.telegramToken + "/sendMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: TT.telegramChatId, text: noiDung })
+      });
+      const kqJson = await res.json();
+      daGui = !!kqJson.ok;
+    } catch(err){ daGui = false; }
+    nut.disabled = false; nut.textContent = "Gửi xác nhận";
+  }
+
+  if (daGui){
+    kq.innerHTML = '<p style="color:#14213d"><b>Cảm ơn ' + ten + '!</b> Xác nhận của bạn đã được gửi đến gia đình. 💐</p>';
+    document.getElementById("form-rsvp").reset();
+  } else {
+    const linkSMS = "sms:" + (TT.soNhanTin||"") + "?&body=" + encodeURIComponent(noiDung);
+    kq.innerHTML =
+      '<p style="color:#14213d"><b>Cảm ơn ' + ten + '!</b> Bấm nút bên dưới để gửi xác nhận đến gia đình.</p>' +
+      '<a href="' + linkSMS + '" class="nut-map" style="border-color:#14213d;color:#14213d;display:inline-block;margin-top:12px">Gửi tin nhắn xác nhận</a>';
+  }
+  try { localStorage.setItem("rsvp_"+Date.now(), noiDung); } catch(err){}
 });
 </script>
 </body>

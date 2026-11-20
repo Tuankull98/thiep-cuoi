@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bảng điều khiển thiệp cưới</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+  :root{--xanh:#14213d;--vang:#c9a961;--vien:#e2dccd;--nhat:#6b7280}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:#f4f1ea;color:#2c3447;line-height:1.6;padding:24px 16px 80px}
+  .boc{max-width:900px;margin:0 auto}
+  h1{font-size:1.5rem;color:var(--xanh);margin-bottom:4px}
+  .phu{color:var(--nhat);font-size:.9rem;margin-bottom:24px}
+  .khoi{background:#fff;border:1px solid var(--vien);border-radius:14px;padding:22px;margin-bottom:18px}
+  .khoi h2{font-size:1rem;color:var(--xanh);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .khoi .mota{font-size:.82rem;color:var(--nhat);margin-bottom:16px}
+  .luoi{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.luoi{grid-template-columns:1fr}}
+  label{display:block;font-size:.78rem;color:var(--nhat);margin-bottom:4px}
+  input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--vien);border-radius:9px;
+    font-family:inherit;font-size:.92rem;background:#fdfcf8}
+  input:focus,textarea:focus{outline:2px solid var(--vang);border-color:transparent}
+  textarea{min-height:70px;resize:vertical}
+  .o{margin-bottom:12px}
+  .nut{padding:11px 20px;border:none;border-radius:9px;background:var(--xanh);color:#fff;font-family:inherit;
+    font-size:.88rem;cursor:pointer;transition:.2s}
+  .nut:hover{background:var(--vang);color:var(--xanh)}
+  .nut.phu2{background:#fff;color:var(--xanh);border:1px solid var(--xanh)}
+  .nut.phu2:hover{background:var(--xanh);color:#fff}
+  .hang-nut{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  .xem-anh{width:100%;max-width:280px;border-radius:10px;border:1px solid var(--vien);margin-top:10px;display:none}
+  .canh-bao{background:#fff8e6;border:1px solid #e8d9a8;border-radius:10px;padding:12px 14px;font-size:.84rem;margin-top:12px}
+  .sk-khoi{border:1px dashed var(--vien);border-radius:10px;padding:14px;margin-bottom:12px;background:#fdfcf8}
+  .sk-khoi h3{font-size:.9rem;color:var(--xanh);margin-bottom:10px}
+  #ket-xuat{width:100%;min-height:200px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.76rem;
+    background:#14213d;color:#e8d9a8;border:none;border-radius:10px;padding:14px;display:none}
+  .thanh-duoi{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--vien);
+    padding:12px 16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;box-shadow:0 -4px 20px rgba(0,0,0,.06);z-index:10}
+  .bao{font-size:.84rem;color:#15803d;margin-top:8px;display:none}
+  ol{margin:8px 0 0 20px;font-size:.86rem}
+  ol li{margin-bottom:5px}
+  code{background:#f1efe8;padding:2px 6px;border-radius:5px;font-size:.84rem}
+</style>
+</head>
+<body>
+<div class="boc">
+  <h1>Bảng điều khiển thiệp cưới</h1>
+  <p class="phu">Sửa thông tin ở đây → bấm "Tạo file data.js" → tải về và upload lên GitHub. Thiệp sẽ tự cập nhật.</p>
+
+  <!-- ẢNH -->
+  <div class="khoi">
+    <h2>🖼️ Ảnh nền &amp; ảnh cô dâu chú rể</h2>
+    <p class="mota">Ảnh sẽ được tự động nén nhỏ lại và nhúng thẳng vào file data.js, bạn không cần upload ảnh riêng.</p>
+    <div class="o">
+      <label>Ảnh nền màn hình đầu</label>
+      <input type="file" id="file-nen" accept="image/*">
+      <img class="xem-anh" id="xem-nen">
+    </div>
+    <div class="luoi">
+      <div class="o">
+        <label>Ảnh chú rể (để trống thì dùng ảnh nền)</label>
+        <input type="file" id="file-cr" accept="image/*">
+        <img class="xem-anh" id="xem-cr">
+      </div>
+      <div class="o">
+        <label>Ảnh cô dâu (để trống thì dùng ảnh nền)</label>
+        <input type="file" id="file-cd" accept="image/*">
+        <img class="xem-anh" id="xem-cd">
+      </div>
+    </div>
+    <div class="hang-nut"><button class="nut phu2" id="xoa-anh">Xoá ảnh, quay về ảnh mặc định</button></div>
+  </div>
+
+  <!-- CHUNG -->
+  <div class="khoi">
+    <h2>💒 Thông tin chung</h2>
+    <div class="luoi">
+      <div class="o"><label>Ngày giờ cưới chính (để đếm ngược)</label><input id="ngayGioChinh" placeholder="2026-12-20 18:00"></div>
+      <div class="o"><label>Địa điểm chính</label><input id="diaDiemChinh"></div>
+      <div class="o"><label>Chữ chạy từ trên xuống giữa màn hình</label><input id="chuChay"></div>
+      <div class="o"><label>Link nhạc mp3 (để trống dùng nhạc có sẵn)</label><input id="nhacMp3" placeholder="https://.../bai-hat.mp3"></div>
+    </div>
+    <div class="o"><label>Câu dẫn (chữ viết tay lớn)</label><input id="cauDan"></div>
+    <div class="o"><label>Lời mời</label><textarea id="loiMoi"></textarea></div>
+    <div class="canh-bao">Ngày giờ phải viết đúng dạng <code>NĂM-THÁNG-NGÀY GIỜ:PHÚT</code>, ví dụ <code>2027-02-15 17:30</code>.</div>
+  </div>
+
+  <!-- CHÚ RỂ -->
+  <div class="khoi">
+    <h2>🤵 Chú rể</h2>
+    <p class="mota">Ô nào để trống thì dòng đó tự ẩn trên thiệp.</p>
+    <div class="luoi">
+      <div class="o"><label>Tên gọi (hiện ở màn hình đầu)</label><input id="cr-tenGoi"></div>
+      <div class="o"><label>Họ tên đầy đủ</label><input id="cr-hoTen"></div>
+      <div class="o"><label>Năm sinh</label><input id="cr-namSinh" type="number"></div>
+      <div class="o"><label>Nghề nghiệp</label><input id="cr-ngheNghiep"></div>
+      <div class="o"><label>Địa chỉ</label><input id="cr-diaChi"></div>
+      <div class="o"><label>Điện thoại</label><input id="cr-dienThoai"></div>
+      <div class="o"><label>Tên bố</label><input id="cr-bo"></div>
+      <div class="o"><label>Tên mẹ</label><input id="cr-me"></div>
+    </div>
+  </div>
+
+  <!-- CÔ DÂU -->
+  <div class="khoi">
+    <h2>👰 Cô dâu</h2>
+    <div class="luoi">
+      <div class="o"><label>Tên gọi</label><input id="cd-tenGoi"></div>
+      <div class="o"><label>Họ tên đầy đủ</label><input id="cd-hoTen"></div>
+      <div class="o"><label>Năm sinh</label><input id="cd-namSinh" type="number"></div>
+      <div class="o"><label>Nghề nghiệp</label><input id="cd-ngheNghiep"></div>
+      <div class="o"><label>Địa chỉ</label><input id="cd-diaChi"></div>
+      <div class="o"><label>Điện thoại</label><input id="cd-dienThoai"></div>
+      <div class="o"><label>Tên bố</label><input id="cd-bo"></div>
+      <div class="o"><label>Tên mẹ</label><input id="cd-me"></div>
+    </div>
+  </div>
+
+  <!-- SỰ KIỆN -->
+  <div class="khoi">
+    <h2>📅 Chương trình lễ cưới</h2>
+    <div id="ds-sk"></div>
+    <div class="hang-nut">
+      <button class="nut phu2" id="them-sk">+ Thêm một buổi lễ</button>
+      <button class="nut phu2" id="bot-sk">− Bớt buổi lễ cuối</button>
+    </div>
+  </div>
+
+  <!-- TELEGRAM -->
+  <div class="khoi">
+    <h2>📨 Nhận xác nhận qua Telegram</h2>
+    <p class="mota">Khi khách bấm "Gửi xác nhận", tin nhắn sẽ bay thẳng vào Telegram của bạn.</p>
+    <div class="luoi">
+      <div class="o"><label>Bot Token</label><input id="telegramToken" placeholder="1234567890:AAE..."></div>
+      <div class="o"><label>Chat ID</label><input id="telegramChatId" placeholder="123456789"></div>
+    </div>
+    <div class="o"><label>Số điện thoại nhận SMS (dự phòng khi Telegram lỗi)</label><input id="soNhanTin"></div>
+    <div class="hang-nut"><button class="nut phu2" id="test-tele">Gửi thử một tin nhắn</button></div>
+    <p class="bao" id="bao-tele"></p>
+
+    <div class="canh-bao">
+      <b>Cách lấy Token và Chat ID:</b>
+      <ol>
+        <li>Mở Telegram, tìm <code>@BotFather</code>, gõ <code>/newbot</code>, đặt tên bot. BotFather trả về một chuỗi dài — đó là <b>Bot Token</b>.</li>
+        <li>Tìm tiếp <code>@userinfobot</code>, bấm Start. Nó trả về số <b>Id</b> của bạn — đó là <b>Chat ID</b>.</li>
+        <li>Quan trọng: quay lại tìm bot vừa tạo, bấm <b>Start</b> một lần. Không làm bước này Telegram sẽ chặn, bot không nhắn cho bạn được.</li>
+      </ol>
+      <p style="margin-top:10px"><b>Lưu ý bảo mật:</b> repo GitHub của bạn để Public nên ai xem mã nguồn cũng thấy được token này. Hãy tạo bot <b>riêng chỉ dùng cho thiệp cưới</b>, đừng dùng bot đang dùng việc khác. Rủi ro tối đa là có người nghịch gửi tin spam vào bot đó — khi cưới xong bạn vào BotFather gõ <code>/deletebot</code> là xong.</p>
+    </div>
+  </div>
+
+  <div class="khoi">
+    <h2>📤 Tạo file và đưa lên GitHub</h2>
+    <ol>
+      <li>Bấm <b>Tạo file data.js</b> ở thanh dưới cùng.</li>
+      <li>File <code>data.js</code> được tải về máy bạn.</li>
+      <li>Vào <code>github.com/Tuankull98/thiep-cuoi</code> → bấm <b>Add file</b> → <b>Upload files</b>.</li>
+      <li>Kéo file <code>data.js</code> vừa tải vào → bấm <b>Commit changes</b>.</li>
+      <li>Đợi 1–2 phút, mở lại link thiệp là thấy nội dung mới.</li>
+    </ol>
+    <textarea id="ket-xuat" readonly></textarea>
+  </div>
+</div>
+
+<div class="thanh-duoi">
+  <button class="nut" id="tao-file">⬇ Tạo file data.js</button>
+  <button class="nut phu2" id="sao-chep">📋 Sao chép nội dung</button>
+  <button class="nut phu2" id="xem-thu">👁 Xem thử thiệp</button>
+</div>
+
+<script>
+const G = id => document.getElementById(id);
+let DL = JSON.parse(JSON.stringify(window.THONG_TIN || {}));
+DL.chuRe = DL.chuRe || {}; DL.coDau = DL.coDau || {}; DL.suKien = DL.suKien || [];
+
+/* ---------- Đổ dữ liệu hiện tại vào form ---------- */
+["ngayGioChinh","diaDiemChinh","chuChay","nhacMp3","cauDan","loiMoi","soNhanTin","telegramToken","telegramChatId"]
+  .forEach(k => { if (G(k)) G(k).value = DL[k] || ""; });
+["tenGoi","hoTen","namSinh","ngheNghiep","diaChi","dienThoai","bo","me"].forEach(k => {
+  if (G("cr-"+k)) G("cr-"+k).value = DL.chuRe[k] || "";
+  if (G("cd-"+k)) G("cd-"+k).value = DL.coDau[k] || "";
+});
+
+/* ---------- Sự kiện ---------- */
+function veSuKien(){
+  G("ds-sk").innerHTML = DL.suKien.map((sk,i) => `
+    <div class="sk-khoi">
+      <h3>Buổi lễ ${i+1}</h3>
+      <div class="luoi">
+        <div class="o"><label>Biểu tượng</label><input data-sk="${i}" data-k="icon" value="${sk.icon||""}"></div>
+        <div class="o"><label>Tên buổi lễ</label><input data-sk="${i}" data-k="ten" value="${sk.ten||""}"></div>
+        <div class="o"><label>Giờ</label><input data-sk="${i}" data-k="gio" value="${sk.gio||""}"></div>
+        <div class="o"><label>Ngày dương</label><input data-sk="${i}" data-k="ngay" value="${sk.ngay||""}"></div>
+        <div class="o"><label>Ngày âm / ghi chú</label><input data-sk="${i}" data-k="amLich" value="${sk.amLich||""}"></div>
+        <div class="o"><label>Nơi tổ chức</label><input data-sk="${i}" data-k="noi" value="${sk.noi||""}"></div>
+      </div>
+      <div class="o"><label>Địa chỉ</label><input data-sk="${i}" data-k="diaChi" value="${sk.diaChi||""}"></div>
+      <div class="o"><label>Link Google Maps</label><input data-sk="${i}" data-k="map" value="${sk.map||""}"></div>
+    </div>`).join("");
+}
+veSuKien();
+G("them-sk").onclick = () => { DL.suKien.push({icon:"🎊",ten:"",gio:"",ngay:"",amLich:"",noi:"",diaChi:"",map:""}); thuThapSK(); veSuKien(); };
+G("bot-sk").onclick  = () => { thuThapSK(); DL.suKien.pop(); veSuKien(); };
+function thuThapSK(){
+  document.querySelectorAll("[data-sk]").forEach(inp => {
+    const i = +inp.dataset.sk; if (DL.suKien[i]) DL.suKien[i][inp.dataset.k] = inp.value;
+  });
+}
+
+/* ---------- Nén ảnh và nhúng vào data ---------- */
+function nenAnh(file, rongToiDa, xong){
+  const img = new Image();
+  img.onload = () => {
+    const tyLe = Math.min(1, rongToiDa / img.width);
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width * tyLe);
+    c.height = Math.round(img.height * tyLe);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    xong(c.toDataURL("image/jpeg", 0.82));
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(file);
+}
+function ganAnh(idFile, idXem, khoa, rong){
+  G(idFile).addEventListener("change", e => {
+    const f = e.target.files[0]; if (!f) return;
+    nenAnh(f, rong, duLieu => {
+      DL[khoa] = duLieu;
+      const xem = G(idXem); xem.src = duLieu; xem.style.display = "block";
+    });
+  });
+}
+ganAnh("file-nen","xem-nen","anhNen",1600);
+ganAnh("file-cr","xem-cr","anhChuRe",500);
+ganAnh("file-cd","xem-cd","anhCoDau",500);
+G("xoa-anh").onclick = () => {
+  DL.anhNen = "anh-cuoi.png"; DL.anhChuRe = ""; DL.anhCoDau = "";
+  ["xem-nen","xem-cr","xem-cd"].forEach(i => G(i).style.display = "none");
+  ["file-nen","file-cr","file-cd"].forEach(i => G(i).value = "");
+  alert("Đã quay về ảnh mặc định anh-cuoi.png");
+};
+if (DL.anhNen && DL.anhNen.startsWith("data:")){ G("xem-nen").src = DL.anhNen; G("xem-nen").style.display="block"; }
+if (DL.anhChuRe && DL.anhChuRe.startsWith("data:")){ G("xem-cr").src = DL.anhChuRe; G("xem-cr").style.display="block"; }
+if (DL.anhCoDau && DL.anhCoDau.startsWith("data:")){ G("xem-cd").src = DL.anhCoDau; G("xem-cd").style.display="block"; }
+
+/* ---------- Gom toàn bộ form thành dữ liệu ---------- */
+function thuThap(){
+  ["ngayGioChinh","diaDiemChinh","chuChay","nhacMp3","cauDan","loiMoi","soNhanTin","telegramToken","telegramChatId"]
+    .forEach(k => DL[k] = G(k).value.trim());
+  ["tenGoi","hoTen","namSinh","ngheNghiep","diaChi","dienThoai","bo","me"].forEach(k => {
+    DL.chuRe[k] = G("cr-"+k).value.trim();
+    DL.coDau[k] = G("cd-"+k).value.trim();
+  });
+  DL.chuRe.namSinh = +DL.chuRe.namSinh || "";
+  DL.coDau.namSinh = +DL.coDau.namSinh || "";
+  thuThapSK();
+  if (!DL.anhNen) DL.anhNen = "anh-cuoi.png";
+  return "/* File thông tin thiệp cưới — tạo tự động từ admin.html */\nwindow.THONG_TIN = " +
+         JSON.stringify(DL, null, 2) + ";\n";
+}
+
+/* ---------- Tạo file / sao chép / xem thử ---------- */
+G("tao-file").onclick = () => {
+  const noiDung = thuThap();
+  G("ket-xuat").value = noiDung; G("ket-xuat").style.display = "block";
+  const blob = new Blob([noiDung], {type:"text/javascript"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "data.js"; a.click();
+  URL.revokeObjectURL(a.href);
+  const kb = Math.round(noiDung.length/1024);
+  alert("Đã tạo file data.js (" + kb + " KB).\nGiờ hãy upload file này lên GitHub.");
+};
+G("sao-chep").onclick = async () => {
+  const noiDung = thuThap();
+  G("ket-xuat").value = noiDung; G("ket-xuat").style.display = "block";
+  try { await navigator.clipboard.writeText(noiDung); alert("Đã sao chép. Dán đè vào file data.js trên GitHub."); }
+  catch(e){ G("ket-xuat").select(); alert("Hãy bấm Ctrl+C để sao chép phần mã đang bôi đen."); }
+};
+G("xem-thu").onclick = () => {
+  thuThap();
+  try { sessionStorage.setItem("xem_thu", JSON.stringify(DL)); } catch(e){}
+  window.open("index.html?xemthu=1", "_blank");
+};
+
+/* ---------- Gửi thử Telegram ---------- */
+G("test-tele").onclick = async () => {
+  const token = G("telegramToken").value.trim(), chatId = G("telegramChatId").value.trim();
+  const bao = G("bao-tele"); bao.style.display = "block";
+  if (!token || !chatId){ bao.style.color = "#b91c1c"; bao.textContent = "Bạn chưa điền đủ Token và Chat ID."; return; }
+  bao.style.color = "#6b7280"; bao.textContent = "Đang gửi...";
+  try{
+    const r = await fetch("https://api.telegram.org/bot"+token+"/sendMessage", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ chat_id: chatId, text: "✅ Kết nối thành công! Thiệp cưới sẽ gửi xác nhận của khách về đây." })
+    });
+    const j = await r.json();
+    if (j.ok){ bao.style.color="#15803d"; bao.textContent="Thành công! Kiểm tra Telegram của bạn."; }
+    else { bao.style.color="#b91c1c"; bao.textContent="Lỗi: " + (j.description||"không rõ") + ". Kiểm tra lại Token/Chat ID và nhớ bấm Start với bot."; }
+  } catch(e){ bao.style.color="#b91c1c"; bao.textContent="Không gọi được Telegram. Kiểm tra mạng."; }
+};
+</script>
+</body>
+</html>

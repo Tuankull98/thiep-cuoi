@@ -34,7 +34,7 @@
   .canh-bao{background:#fff8e6;border:1px solid #e8d9a8;border-radius:10px;padding:12px 14px;font-size:.84rem;margin-top:12px}
   .sk-khoi{border:1px dashed var(--vien);border-radius:10px;padding:14px;margin-bottom:12px;background:#fdfcf8}
   .sk-khoi h3{font-size:.9rem;color:var(--xanh);margin-bottom:10px}
-  #ket-xuat{width:100%;min-height:200px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.76rem;
+  #ket-xuat,#kq-link{width:100%;min-height:200px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.76rem;
     background:#14213d;color:#e8d9a8;border:none;border-radius:10px;padding:14px;display:none}
   .thanh-duoi{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--vien);
     padding:12px 16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;box-shadow:0 -4px 20px rgba(0,0,0,.06);z-index:10}
@@ -154,6 +154,26 @@
       </ol>
       <p style="margin-top:10px"><b>Lưu ý bảo mật:</b> repo GitHub của bạn để Public nên ai xem mã nguồn cũng thấy được token này. Hãy tạo bot <b>riêng chỉ dùng cho thiệp cưới</b>, đừng dùng bot đang dùng việc khác. Rủi ro tối đa là có người nghịch gửi tin spam vào bot đó — khi cưới xong bạn vào BotFather gõ <code>/deletebot</code> là xong.</p>
     </div>
+  </div>
+
+  <!-- LINK MỜI RIÊNG -->
+  <div class="khoi">
+    <h2>✉️ Tạo link mời riêng cho từng khách</h2>
+    <p class="mota">Mỗi khách một link riêng. Mở ra sẽ có dòng "Trân trọng kính mời [tên khách]", và ô họ tên trong form xác nhận cũng tự điền sẵn.</p>
+    <div class="o"><label>Địa chỉ trang thiệp</label><input id="url-goc"></div>
+    <div class="o">
+      <label>Danh sách khách — mỗi dòng một người</label>
+      <textarea id="ds-khach" style="min-height:110px" placeholder="Anh Nam&#10;Chị Hương&#10;Gia đình bác Tuấn&#10;Lớp 12A3"></textarea>
+    </div>
+    <div class="o">
+      <label>Lời nhắn gửi kèm — dùng {ten} và {link} để tự thay</label>
+      <textarea id="mau-tin"></textarea>
+    </div>
+    <div class="hang-nut">
+      <button class="nut" id="tao-link">Tạo link mời</button>
+      <button class="nut phu2" id="chep-link">📋 Sao chép tất cả</button>
+    </div>
+    <textarea id="kq-link" readonly></textarea>
   </div>
 
   <div class="khoi">
@@ -287,6 +307,32 @@ G("xem-thu").onclick = () => {
   thuThap();
   try { sessionStorage.setItem("xem_thu", JSON.stringify(DL)); } catch(e){}
   window.open("index.html?xemthu=1", "_blank");
+};
+
+/* ---------- Tạo link mời riêng cho từng khách ---------- */
+G("url-goc").value = location.href.replace(/admin\.html.*$/, "").replace(/\/?$/, "/");
+G("mau-tin").value =
+  "Chào {ten}!\n" +
+  "Mình trân trọng mời bạn tới chung vui trong ngày cưới của tụi mình.\n" +
+  "Thiệp mời online của bạn đây nhé: {link}\n" +
+  "Rất mong được gặp bạn!";
+
+G("tao-link").onclick = () => {
+  const goc = G("url-goc").value.trim().replace(/\?.*$/, "").replace(/\/?$/, "/");
+  const mau = G("mau-tin").value;
+  const ds = G("ds-khach").value.split("\n").map(s => s.trim()).filter(Boolean);
+  if (!ds.length){ alert("Bạn chưa nhập tên khách nào."); return; }
+  const ra = ds.map(ten => {
+    const link = goc + "?khach=" + encodeURIComponent(ten);
+    return "— " + ten + " —\n" + mau.replace(/\{ten\}/g, ten).replace(/\{link\}/g, link);
+  }).join("\n\n");
+  const o = G("kq-link"); o.value = ra; o.style.display = "block";
+};
+G("chep-link").onclick = async () => {
+  const o = G("kq-link");
+  if (!o.value){ alert("Bạn bấm Tạo link mời trước đã."); return; }
+  try { await navigator.clipboard.writeText(o.value); alert("Đã sao chép toàn bộ. Dán vào Zalo rồi tách từng người ra gửi."); }
+  catch(e){ o.select(); alert("Hãy bấm Ctrl+C để sao chép."); }
 };
 
 /* ---------- Telegram: mở bot, lấy Chat ID tự động ---------- */

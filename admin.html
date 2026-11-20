@@ -48,7 +48,11 @@
 <body>
 <div class="boc">
   <h1>Bảng điều khiển thiệp cưới</h1>
-  <p class="phu">Sửa thông tin ở đây → bấm "Tạo file data.js" → tải về và upload lên GitHub. Thiệp sẽ tự cập nhật.</p>
+  <p class="phu">Sửa thông tin ở đây → bấm "🚀 Lưu lên website ngay". Mọi thứ bạn gõ được tự lưu nháp trong máy, không sợ mất.</p>
+  <div id="bao-nhap" style="display:none;background:#eef7ee;border:1px solid #b9ddb9;border-radius:10px;padding:12px 14px;font-size:.86rem;margin-bottom:16px">
+    <b>Đã khôi phục bản nháp lần trước.</b>
+    <button class="nut phu2" id="bo-nhap" style="padding:6px 12px;font-size:.8rem;margin-left:10px">Bỏ nháp, lấy lại bản đang chạy trên web</button>
+  </div>
 
   <!-- ẢNH -->
   <div class="khoi">
@@ -199,13 +203,46 @@
     <textarea id="kq-link" readonly></textarea>
   </div>
 
+  <!-- LƯU THẲNG LÊN WEBSITE -->
   <div class="khoi">
-    <h2>📤 Tạo file và đưa lên GitHub</h2>
+    <h2>🚀 Lưu thẳng lên website</h2>
+    <p class="mota">Bấm một nút là nội dung lên thẳng thiệp thật, không phải tải file rồi upload tay nữa.</p>
+    <div class="luoi">
+      <div class="o"><label>Tài khoản GitHub</label><input id="gh-owner"></div>
+      <div class="o"><label>Tên repo</label><input id="gh-repo"></div>
+    </div>
+    <div class="o">
+      <label>GitHub Token (dán một lần, trình duyệt tự nhớ)</label>
+      <input id="gh-token" type="password" placeholder="github_pat_...">
+    </div>
+    <div class="hang-nut">
+      <button class="nut" id="luu-web">🚀 Lưu lên website ngay</button>
+      <button class="nut phu2" id="xoa-token">Xoá token khỏi máy</button>
+    </div>
+    <p class="bao" id="bao-gh"></p>
+
+    <div class="canh-bao">
+      <b>Lấy token thế nào (làm một lần duy nhất):</b>
+      <ol>
+        <li>Mở <code>github.com/settings/personal-access-tokens/new</code></li>
+        <li><b>Token name</b>: gõ đại <code>thiep-cuoi</code></li>
+        <li><b>Expiration</b>: chọn <code>90 days</code> hoặc xa hơn</li>
+        <li><b>Repository access</b>: chọn <b>Only select repositories</b> → chọn <code>thiep-cuoi</code></li>
+        <li><b>Permissions</b> → <b>Repository permissions</b> → tìm dòng <b>Contents</b> → đổi thành <b>Read and write</b></li>
+        <li>Bấm <b>Generate token</b>, copy chuỗi hiện ra và dán vào ô trên</li>
+      </ol>
+      <p style="margin-top:10px">Token này chỉ nằm trong trình duyệt máy bạn, <b>không</b> được ghi vào website. Nó chỉ có quyền sửa đúng repo thiệp cưới, không đụng được repo khác.</p>
+    </div>
+  </div>
+
+  <div class="khoi">
+    <h2>📤 Cách thủ công (nếu không muốn dùng token)</h2>
     <ol>
       <li>Bấm <b>Tạo file data.js</b> ở thanh dưới cùng.</li>
       <li>File <code>data.js</code> được tải về máy bạn.</li>
+      <li>Nếu có đổi ảnh nền, bấm thêm <b>⬇ Tải ảnh bìa</b> để lấy <code>anh-bia.jpg</code>.</li>
       <li>Vào <code>github.com/Tuankull98/thiep-cuoi</code> → bấm <b>Add file</b> → <b>Upload files</b>.</li>
-      <li>Kéo file <code>data.js</code> vừa tải vào → bấm <b>Commit changes</b>.</li>
+      <li>Kéo các file vừa tải vào → bấm <b>Commit changes</b>.</li>
       <li>Đợi 1–2 phút, mở lại link thiệp là thấy nội dung mới.</li>
     </ol>
     <textarea id="ket-xuat" readonly></textarea>
@@ -220,8 +257,36 @@
 
 <script>
 const G = id => document.getElementById(id);
+const KHOA_NHAP = "thiep_cuoi_nhap";
+
+/* Lấy bản nháp đã lưu trong máy; nếu không có thì lấy bản đang chạy trên web */
 let DL = JSON.parse(JSON.stringify(window.THONG_TIN || {}));
+try{
+  const nhap = localStorage.getItem(KHOA_NHAP);
+  if (nhap){ DL = JSON.parse(nhap); G("bao-nhap").style.display = "block"; }
+}catch(e){}
 DL.chuRe = DL.chuRe || {}; DL.coDau = DL.coDau || {}; DL.suKien = DL.suKien || [];
+
+G("bo-nhap").onclick = () => {
+  if (!confirm("Bỏ toàn bộ nội dung đang sửa dở và lấy lại bản đang chạy trên web?")) return;
+  try { localStorage.removeItem(KHOA_NHAP); } catch(e){}
+  location.reload();
+};
+
+/* Tự động lưu nháp mỗi khi bạn gõ */
+let hen = null;
+function luuNhap(){
+  clearTimeout(hen);
+  hen = setTimeout(() => {
+    try{
+      docForm();
+      localStorage.setItem(KHOA_NHAP, JSON.stringify(DL));
+    }catch(e){
+      if (String(e).indexOf("uota") > -1) console.warn("Ảnh quá lớn, không lưu nháp được.");
+    }
+  }, 400);
+}
+document.addEventListener("input", e => { if (e.target.closest(".khoi")) luuNhap(); });
 
 /* ---------- Đổ dữ liệu hiện tại vào form ---------- */
 ["ngayGioChinh","diaDiemChinh","chuChay","nhacMp3","cauDan","loiMoi","soNhanTin","telegramToken","telegramChatId"]
@@ -277,6 +342,7 @@ function ganAnh(idFile, idXem, khoa, rong){
     nenAnh(f, rong, duLieu => {
       DL[khoa] = duLieu;
       const xem = G(idXem); xem.src = duLieu; xem.style.display = "block";
+      luuNhap();
     });
   });
 }
@@ -294,7 +360,7 @@ if (DL.anhChuRe && DL.anhChuRe.startsWith("data:")){ G("xem-cr").src = DL.anhChu
 if (DL.anhCoDau && DL.anhCoDau.startsWith("data:")){ G("xem-cd").src = DL.anhCoDau; G("xem-cd").style.display="block"; }
 
 /* ---------- Gom toàn bộ form thành dữ liệu ---------- */
-function thuThap(){
+function docForm(){
   ["ngayGioChinh","diaDiemChinh","chuChay","nhacMp3","cauDan","loiMoi","soNhanTin","telegramToken","telegramChatId"]
     .forEach(k => DL[k] = G(k).value.trim());
   ["tenGoi","hoTen","namSinh","ngheNghiep","diaChi","dienThoai","bo","me"].forEach(k => {
@@ -305,6 +371,10 @@ function thuThap(){
   DL.coDau.namSinh = +DL.coDau.namSinh || "";
   thuThapSK();
   if (!DL.anhNen) DL.anhNen = "anh-cuoi.png";
+  return DL;
+}
+function thuThap(){
+  docForm();
   return "/* File thông tin thiệp cưới — tạo tự động từ admin.html */\nwindow.THONG_TIN = " +
          JSON.stringify(DL, null, 2) + ";\n";
 }
@@ -552,6 +622,77 @@ G("lay-id").onclick = async () => {
       baoTele("#15803d", "Đã chọn Chat ID: <b>" + a.dataset.id + "</b>");
     });
   } catch(e){ baoTele("#b91c1c", "Không kết nối được Telegram. Kiểm tra mạng."); }
+};
+
+/* ---------- Lưu thẳng lên GitHub ---------- */
+(function khoiTaoGH(){
+  const chu = location.hostname.split(".")[0];
+  const duong = location.pathname.split("/").filter(Boolean);
+  G("gh-owner").value = localStorage.getItem("gh_owner") || chu || "";
+  G("gh-repo").value  = localStorage.getItem("gh_repo")  || duong[0] || "";
+  G("gh-token").value = localStorage.getItem("gh_token") || "";
+})();
+
+function baoGH(mau, chu){
+  const b = G("bao-gh"); b.style.display = "block"; b.style.color = mau; b.innerHTML = chu;
+}
+function b64Chu(s){
+  const byte = new TextEncoder().encode(s);
+  let nhi = "";
+  for (let i = 0; i < byte.length; i++) nhi += String.fromCharCode(byte[i]);
+  return btoa(nhi);
+}
+async function ghGhiFile(owner, repo, duong, noiDungB64, token, loiNhan){
+  const url = "https://api.github.com/repos/" + owner + "/" + repo + "/contents/" + duong;
+  const dau = { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" };
+  let sha = null;
+  const cu = await fetch(url, { headers: dau });
+  if (cu.ok) sha = (await cu.json()).sha;
+  else if (cu.status === 401) throw new Error("Token sai hoặc đã hết hạn.");
+  else if (cu.status === 403) throw new Error("Token không có quyền Contents: Read and write.");
+  else if (cu.status !== 404) throw new Error("Không đọc được repo (mã " + cu.status + ").");
+
+  const than = { message: loiNhan, content: noiDungB64 };
+  if (sha) than.sha = sha;
+  const r = await fetch(url, { method: "PUT", headers: dau, body: JSON.stringify(than) });
+  if (!r.ok){
+    let mo = "mã " + r.status;
+    try { mo = (await r.json()).message || mo; } catch(e){}
+    throw new Error(mo);
+  }
+}
+
+G("luu-web").onclick = async () => {
+  const owner = G("gh-owner").value.trim();
+  const repo  = G("gh-repo").value.trim();
+  const token = G("gh-token").value.trim();
+  if (!owner || !repo || !token){ baoGH("#b91c1c", "Bạn chưa điền đủ tài khoản, repo và token."); return; }
+
+  localStorage.setItem("gh_owner", owner);
+  localStorage.setItem("gh_repo", repo);
+  localStorage.setItem("gh_token", token);
+
+  const nut = G("luu-web"); nut.disabled = true;
+  const noiDung = thuThap();
+  try{
+    baoGH("#6b7280", "Đang lưu data.js...");
+    await ghGhiFile(owner, repo, "data.js", b64Chu(noiDung), token, "Cap nhat thong tin thiep cuoi");
+
+    if (DL.anhNen && DL.anhNen.startsWith("data:")){
+      baoGH("#6b7280", "Đang lưu ảnh bìa anh-bia.jpg...");
+      await ghGhiFile(owner, repo, "anh-bia.jpg", DL.anhNen.split(",")[1], token, "Cap nhat anh bia");
+    }
+    baoGH("#15803d", "Đã lưu lên website! Đợi khoảng 1–2 phút rồi mở lại link thiệp (nhớ Ctrl+F5).");
+  } catch(e){
+    baoGH("#b91c1c", "Lỗi: " + e.message + "<br>Bạn vẫn có thể dùng cách thủ công ở khung dưới.");
+  }
+  nut.disabled = false;
+};
+
+G("xoa-token").onclick = () => {
+  localStorage.removeItem("gh_token");
+  G("gh-token").value = "";
+  baoGH("#6b7280", "Đã xoá token khỏi trình duyệt này.");
 };
 
 /* ---------- Gửi thử Telegram ---------- */

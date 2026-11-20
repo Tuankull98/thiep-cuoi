@@ -458,13 +458,17 @@ async function veAnhQR(){
   const link = tenKhach ? goc + "?khach=" + encodeURIComponent(tenKhach) : goc;
 
   ctx.fillStyle = "#14213d"; ctx.fillRect(0,0,1080,1350);
-  try{
-    const nguon = (DL.anhNen && DL.anhNen.startsWith("data:")) ? DL.anhNen : "anh-cuoi.png";
-    const img = await napAnh(nguon);
+  /* Dùng đúng ảnh nền hiện tại: ảnh vừa chọn (base64) hoặc file đã lưu trên web */
+  let img = null;
+  for (const nguon of [DL.anhNen, "anh-bia.jpg?v=" + Date.now(), "anh-cuoi.png"]){
+    if (!nguon) continue;
+    try { img = await napAnh(nguon); break; } catch(e){}
+  }
+  if (img){
     const ty = Math.max(1080/img.width, 1350/img.height);
     const w = img.width*ty, h = img.height*ty;
     ctx.drawImage(img, (1080-w)/2, (1350-h)/2*0.55, w, h);
-  }catch(e){}
+  }
 
   const g = ctx.createLinearGradient(0,0,0,1350);
   g.addColorStop(0,"rgba(10,15,30,.62)");
